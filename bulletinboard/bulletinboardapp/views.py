@@ -73,6 +73,12 @@ class Comment(ListView):
         print('!!!!', context['comments_all'])
         return context
 
+    def post(self, request, *args, **kwargs):
+        post_save_request = super().post(request, *args, **kwargs) # переопределение
+        if request.method == 'POST':
+            print('fuck', self)
+        return post_save_request
+        
 class AdAdd(LoginRequiredMixin,CreateView):
     template_name = 'add_ad.html'  # Replace with your template.
     success_url = '/callboard/'  # Replace with your URL or reverse().
