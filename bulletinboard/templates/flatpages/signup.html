@@ -1,0 +1,26 @@
+{% extends "flatpages/default.html" %}
+
+{% block content %}
+<h2> Войти в систему </h2>
+<form method="post">
+{% csrf_token %}
+<style type="text/css">
+    p {
+        display: flex;
+        align-self: center;
+    }
+    p > label {
+        color: gray;
+        min-width: 150px;
+    }
+    .helptext, form > ul > li {
+        display: hidden;
+    }
+    .helptext:hover::after , form > ul > li:hover::after {
+        display: flex;
+    }
+</style>
+{{ form.as_p }}
+<input type="submit" value="Продолжить">
+</form>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "flatpages/default.html" %}
+
+{% block content %}
+<style>
+    .row button, .row input{
+        background-color: #fff;
+        border-radius: 8px;
+        border: 1px solid transparent;
+        border-image: linear-gradient(transparent 0%, #08cfee 100%);
+        border-image-slice: 1;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+        padding: 5px;
+    }
+    .row a{
+        text-decoration: none;  
+        color: rgb(0, 0, 0)
+    }
+</style>
+<h2> Войти в систему </h2>
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+<table>
+<tr>
+    <td>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <td>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+</table>
+
+<input type="submit" value="Войти">
+</form>
+<button> <a href="/sign/signup"> Регистрация </a></button>
+{% endblock %}

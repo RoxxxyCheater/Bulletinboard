@@ -5,9 +5,184 @@
 {% endblock title %}
  
 {% block content %}
-    <h2>{{ flatpage.title }}</h2>
+<style>
+.row{
+   border: 1px solid transparent;
+   border-radius: 8px;
+   border-image: linear-gradient(transparent 0%, #08cfee 100%);
+   border-image-slice: 1;
+   box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+   padding: 10px;
+   min-width: 350px;
+ }
+ .comment{
+    height: 80px;
+    border: 3px solid transparent;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+ }
+ .post-title{
+    border: 3px solid transparent;
+    background-color:#f5fafa;
+    border-radius: 8px;
+    text-align: left;
+
+ }
+ .post-title-link{
+    font-size: 10px;
+    color: #343434;
+    text-decoration: none;
+ }
+ .commdatum{
+    font-size: 8px;
+ }
+ table{
+    margin: auto;
+ }
+ 
+ </style>
+ <h1>All comments: {{ comment_all | length }}</h1>
+<hr>
+ {% if comments_all %} <!-- Если есть товары, то выводим таблицу с ними -->
+     <table>
+         <tr>
+            <td>
+                Post
+            </td>
+             <td>
+                 Author
+             </td>
+             <td>
+                Content
+             </td>
+             <td>
+                Date
+             </td>
+             <td>
+                 Decision
+             </td>
+         </tr>
+         {% for comment in comment_all %}
+            {% if not comment.accepted %}
+             <tr class="comment">
+                <td>
+                    <p class="post-title"><a class="post-title-link" href="#">| {{comment.Ad.title}} </a></p>
+                 </td>
+                 <td>
+                    <a href="#"> {{comment.commAuthor.username}} </a>
+                 </td>
+                 <td>
+                    <a href="#">  {{ comment.content }} </a> <!-- |truncatechars:50 | Censor:'*censored*' дописываем специальный фильтр, чтобы ограничить количество символов до 20. Все остальные символы превратятся в многоточие. -->
+                    <!--| {{ news.content |truncatewords:5 }}  дописываем специальный фильтр, чтобы ограничить количество слов до 5. Все остальные слова превратятся в многоточие. -->
+                 </td>
+                 <td>
+
+                    <img style="height: 27px; width: 27px; border: 1px solid transparent; border-radius: 8px;border-image-slice: 1;box-shadow: 0 0 10px rgba(0,0,0,0.5);" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEMAAABDCAYAAADHyrhzAAAABmJLR0QA/wD/AP+gvaeTAAAD80lEQVR4nO3cv28TVwDA8e97jj3kIDZUbRENyoLamYkhQqww0D8iFVkYIGqpaYRQyBCpKgtj+uOPqDIyI0VMSGzJZQhJhka02FYuwXbPr8PzoxfjcP7x7t7F+LvFuXvv5aO76HTynaCjWq32mZTyOyHEt8Bl4AtAdG53ClPAPuArpf4Mw/CPYrH4T3SDY39kEATzwM9AKb01OqsClD3P+9V88B7j8PDwiVLqeyfLcpgQ4snk5OR9aGO0j4hVp6ty27zneb+JSqVyLp/PbwHnXK/IYZUwDC/LiYmJ23zaEAAlKeWcFELccr2SjHRLAt+4XkUWEkJ8LYIgCAHpejEZqCUZQ5jkGCLSGCPSGCPSGCPSGCPSGCPSyGP4dZ8723d48++b2G1HGsOv+yxsL/Dq8BV3t+/GgowshoGohlUAdho7sSAjidEJYYoDGTmMkyBMHwMZKYw4CNNJICOD0SuEqRvISGD0C2HqBBFBEKgkFphWg0JEu1S4xNOZp6cbw3/nc+/1PWphbeixZgozvZ0mR60jVvdXaajG0JPayiYE6FNmIm6jo9YR5d0yL4OXbL7bZGV6hYIsWFnAoPl1n4XXC9YgJJIHFx98/MiIQgC8CF6wuLtIo+XuCLHxPyKagbhRvHEyRieEySVIkhD65y6dBGFyAZI0hP6sozgIU5ogaUDozyP1CmFKAyQtCP27dv1CmJIESRNC/57BIUxJgKQNASCHhTDZBHEBAZC7MH9h6Vn1mZVJ95p7bNQ3uD51nZzIDTSG7StLiaR8sczN4s34bec+n2P27KyViQHWD9ZZ3BnsCEnqyrIXCACZF3mWv1q2CjLIKePq1Di+D+AaJAsQer92rkCyAqH3jZQ2SJYg9P4dpQWSNQg9RpeSBskiBMTcA22oBg93H7J+sD7UJNGuTF5hq77l5Doirth7oE3V5NHuI54fPB96MtvZOiL+Hy+mvMizPL3M7Bl7p4yNbEPoMXsoayBJQOhxeywrIElB6LH7yDVIkhB6/D5zBZI0hJ5jgNIGSQNCzzNgaYGkBaHnGqKkQdKE0PMNWV7keTz9mKtnrtpYz/vMlWVaEHpOCxVEgZXpFWtHSL93qGxl7csqtk6ZtE+N43NbbFgQlxB6fmjZHHBQENcQtJ9Eiv8ecZ/1C5IBCIB9CWwkMXKvIBmBQCm1KZVSa0lNEAeSFYh2a+aJZx84n9Qs3W4QZQxCP/FcKpXeAj8lOVPnEZIxCID7U1NTf0ffkvCLUuqHJGdsqiZLe0tcO3stMxAfvCXBFATBbfT7MxJ7Nl6hENl4N8lb4EfP8343H3ywqmq1ej6Xy0XfrPJlt+1OYQr4Sym1Cax1e7PKf5lNxeca4WJEAAAAAElFTkSuQmCC">
+                    <img style="height: 27px; width: 27px; border: 1px solid transparent; border-radius: 8px;border-image-slice: 1;box-shadow: 0 0 10px rgba(0,0,0,0.5);" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADt0lEQVRoge2ZTWvcVhSG3+ORlnG7aOLQdBkwtJs6GeOQNv7AYHBxsAsXwzCLyQ/I/JYukj8wi5GJnYWDF954Y4dSikOT4G2h7aJN4tbBoWSRRDpvF5ImJpZGV9KopmXezQgz3Ps8o/t5DAwzzDD/6YjNl16vNFaouEsShN4e3VrfrALmr6uzK6q8CxIMeHvs4GFmP5kCfy83jVDXSDogATJQldZH2/e6g8EOczgxawCugXSoYT8AW2MH3/ftZyQnPEjUBNp5tWiaFcIDZI2qnRefX+vbT6pACnyvcSg7rxa+LS2RAg9SAWVNlZ0/xidT+0kcQtGY30iBB9nryCfZ/Hhnc70Q/JW5VVC7KfDv+1H6SppLPz968GEbiW8gmrBZ8Ii+0z2eu7laITxIOkK9k9ROskBM3R8+fnYI5JLICQ9QQWViW8kC1HY4PDLho2c4VHaPpr/JlCgI74NsWwuMbq1vQtkA6VvA94aTEN7LrxZTJ9zhxKwpAB+I8talX5+cGv+pAgBwbnvjvgANRhIZ8HHHNVI7L68tnJLIWG36wbc+/e1J6l7Qdx84t71xnwzfhAV8CEPWFOz8OTnfk6gKHrA8ShzPLxsAIUB/+PBv0U5KoEU/eFMVvLUAABzP3Vwl0AXhWMBHzxq/uVwTltDmZ788tdpbrAUA4Hh2yZDikepawPcAq/jlCwkAwNGNJSNQD0r3rOELCQDA0fVFA6gH0j1L+MICocSCodKD0j0r+FICAHA0NW+o8Ei6ZwFfWgAADuvzRjQIJf5leABwygogCEBQ8sCrMnj8OvjhnfbdR61SqoUiO2wIrz++pXxdE3S2Pvmy1KWosEA5eFx3IKhBau7ISGfnwpXCEoXmwIDg4YjADT8DUFozh/vVL6MVwMcQAQtI5BKoED5ObglrgaJH4p/s4eP4FGnOPN+3OsxZTeIy5/m35HcO5J0lPAA4Qnq7F9JLKSeT+QYGcRnZOj9hXBHPhbgZ8CdjNZz6tjXIm9TO+bpxR+AJ4Nrx20mkClRxDdy7WDcgPAxQIlEgqhJv5IS3ukntXpxcFbKLfMcYH4CZfmFZmYtK3JVcA2ee769TpBlB2cYBYF+ZA8mq7rAlJBKTXJkL2EavqDVY+IISPgD7ytzYwcNNUW2Q6mdVzIrAn5SAoJEhEZByK2n8AxnL6LMvpgyCsB5UxWUkTrQ6reH0xC6+jMZ5Nj5loPE/OgYPHydBovxGFuf3y/Vlod6JJnY7rdBaNntj9WW8X23aacNmmGGG+R/lH9jQPofrfpcrAAAAAElFTkSuQmCC">
+                    <p class="commdatum">{{ comment.created_at | date:'d M Y h:m'  }}</p>
+                </td>
+             </tr>
+            {%else%}
+            <tr class="comment">
+                <td>
+                    <p class="post-title"><a class="post-title-link" href="#">| {{comment.Ad.title}} </a></p>
+                 </td>
+                 <td>
+                    <a href="#"> {{comment.commAuthor.username}} </a>
+                 </td>
+                 <td>
+                    <a href="#">  {{ comment.content }} </a> <!-- |truncatechars:50 | Censor:'*censored*' дописываем специальный фильтр, чтобы ограничить количество символов до 20. Все остальные символы превратятся в многоточие. -->
+                    <!--| {{ news.content |truncatewords:5 }}  дописываем специальный фильтр, чтобы ограничить количество слов до 5. Все остальные слова превратятся в многоточие. -->
+                 </td>
+                 <td>
+                    <img style="transform: rotate(45deg); height: 47px; width: 47px;" src="data:image/png;base64,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">
+                    <img style="height: 17px; width: 17px;" src="data:image/png;base64,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">
+                    <p class="commdatum">{{ comment.created_at | date:'d M Y h:m'  }}</p>
+                </td>
+             </tr>
+            {%endif%}
+         {% endfor %}
+     </table>
+     <!-- Проверяем что поддерживается постраничный вывод -->
+     {% if is_paginated %}
+         
+         <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
+         {% if page_obj.has_previous %}
+             <a href="?page=1">First</a>
+             <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
+         {% endif %}
+
+         <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+         {% for num in page_obj.paginator.page_range %}
+             {% if page_obj.number == num %}
+                 <a>{{ num }}</a>
+             {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                 <a href="?page={{ num }}">{{ num }}</a>
+             {% endif %}
+         {% endfor %}
+
+         <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+         {% if page_obj.has_next %}
+             <a href="?page={{ page_obj.next_page_number }}">>>></a>
+             <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+         {% endif %}
+
+     {% endif %}
+ {% else %}
+     <h2>Ads not found!</h2>
+ {% endif %}
+{% endblock content %}
+
+
+
+
+<!-- {% if comment_all%}
+    <table>
+        <tr>
+            <td>
+                Created_ad
+            </td>
+            <td>
+                CommAuthor
+            </td>
+            <td>
+                Content
+            </td>
+            <td>
+                Accepted
+            </td>
+            <td>
+                Ad
+            </td>
+        </tr>
+        {% for post in post_all %}
+        <div>{{post}}</div>
+            {% for comment in comments_all %}
+                <tr>
+                    <td>
+                        | {{ comment.created_at }}
+                    </td> 
+                    <td>
+                        | {{ comment.commAuthor }}
+                    </td>
+                    <td>
+                        | {{ comment.content }}  
+                    </td>
+                    <td>
+                        | {{ comment.accepted }}
+                    </td>
+                    <td>
+                        | {{ comment.Ad }}
+                    </td>
+                </tr>
+            {% endfor %} 
+        {% endfor %}
+    {% endif %} -->
+
+
+    <!-- <h2>{{ flatpage.title }}</h2>
     <hr>
-    <h3>Наши comments:</h3>
+    <h3>Accepted Comments:</h3>
     {% if comment_all%}
     <table>
         <tr>
@@ -27,11 +202,14 @@
                 Ad
             </td>
         </tr>
-        {% for comment in comment_all %}
-            {% if comment.accepted %}
+        {{comments_all}}
+        {{posts_all}}
+        {% for comment in comments_all.value %}
+            <!-- {% if comment.accepted %} -->
+            <!-- {{ comment.value }}
             <tr>
                 <td>
-                    | {{ comment.created_at }}
+                    | {{ comment }}
                 </td> 
                 <td>
                     | {{ comment.commAuthor }}
@@ -49,31 +227,29 @@
             {% endif %}
         {% endfor %}
     </table>
-    {% if is_paginated %}
-            
+    {% if is_paginated %}    
     <!-- Если доступна предыдущая страница, то даём ссылку на неё и самую первую страницу -->
-    {% if page_obj.has_previous %}
-        <a href="?page=1">First</a>
-        <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
-    {% endif %}
-
-    <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
-    {% for num in page_obj.paginator.page_range %}
-        {% if page_obj.number == num %}
-            <a>{{ num }}</a>
-        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-            <a href="?page={{ num }}">{{ num }}</a>
+        <!-- {% if page_obj.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}"><<<</a>
         {% endif %}
-    {% endfor %}
 
-    <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
-    {% if page_obj.has_next %}
-        <a href="?page={{ page_obj.next_page_number }}">>>></a>
-        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        <!-- Показываем только текущую страницу и ближайшие к ней, чтобы список не тянулся и не захламлял страницу -->
+        <!-- {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a>{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Если есть следующая страница, то даём ссылку на неё и на самую последнюю страницу -->
+        <!-- {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">>>></a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+        {% endif %}
+
     {% endif %}
-
-{% endif %}
-{% else %}
-<h2>Comments not found!</h2>
-{% endif %}
-{% endblock content %}
+    {% else %}
+        <h2>Comments not found!</h2>
+    {% endif %} --> 

@@ -5,46 +5,44 @@ from django.db.models import Sum
 from django.core.cache import cache
 
 
-class Author(models.Model):
-    authors = models.OneToOneField(User, on_delete=models.CASCADE)
+# class Author(models.Model):
+#     authors = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f'{self.authors.username}'
+#     def __str__(self):
+#         return f'{self.authors.username}'
 
 class Category(models.Model):
     catName = models.CharField(max_length=255, unique=True)
-    #cats_ads = models.ManyToManyField(User, through='AdsCategory') #Для соединения Категории и её обьявлений мост AdsCategory
+    
     def __str__(self):
         return f'{self.catName}'
 
+
 class Ad(models.Model):
-
-#     TANKS = 'TK'
-#     HILLS = 'HL'
-#     SELLERS = 'SL'
-#     GUILDMASTERS = 'GM'
-#     QUESTGIVERS = 'QG'
-#     BLACKSMITHS = 'BS'
-#     CURRIERS = 'CR'
-#     POTIONS = 'PS'
-#     SPELLMASTERS = 'SP'
-
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+#   TANKS = 'TK' HILLS = 'HL' SELLERS = 'SL' GUILDMASTERS = 'GM' QUESTGIVERS = 'QG' BLACKSMITHS = 'BS' CURRIERS = 'CR' POTIONS = 'PS' SPELLMASTERS = 'SP'
+    author = models.ForeignKey(User, on_delete=models.CASCADE) #models.ForeignKey(Author, on_delete=models.CASCADE)
     created_ad = models.DateTimeField(auto_now_add=True)
     category =  models.ForeignKey(Category, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField(default='content')
 
-
-
     def __str__(self):
-        return '%s %s %s %s %s' % (self.created_ad, self.author.authors.username, self.title, self.content, self.preview())
+        return '%s %s %s %s %s' % (self.created_ad, self.author.username, self.title, self.content, self.preview())
 
     def preview(self):
         return self.content[:124] + '...'
 
     # def get_absolute_url(self):  # aбсолютный путь для перенаправления запроса
     #     return f'/bulletinboardapp/{self.id}' 
+class FeedFile(models.Model):
+    file=models.ForeignKey(Ad, on_delete=models.CASCADE)
+    filefield = models.FileField(upload_to="static/files/%Y/%m/%d")
+    filetype = models.TextField(default=None)
+
+# class AdFileBr(models.Model):
+#     ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
+#     file = models.ForeignKey(FeedFile, on_delete=models.CASCADE)
+
 
 class Comment(models.Model):
     Ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
@@ -54,14 +52,8 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        try:
-            return self.commentPost.author.authorUser.username 
-        except:
-            return self.commentUser.username 
+        return '%s %s %s %s %s %s %s' % (self.commAuthor.username, self.commAuthor.id, self.created_at, self.content, self.accepted, self.preview(), self.Ad)
             
-    def __str__(self):
-        return self.content
-
     def preview(self):
         return self.content[:124] + '...'
 

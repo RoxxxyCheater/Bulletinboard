@@ -1,14 +1,186 @@
 
 {% extends 'flatpages/default.html' %}
 
+{% load static %}
+
 {% block title %}
 {{ flatpage.title }}
 {% endblock title %}
 
 {% block content %}
-   <h2>{{ flatpage.title }}</h2>
+   <h1>{{ Ad.title }}</h1>
    <hr>
-   <h3>Наши ad:</h3>
-{{ ad }}
+   <p style="text-align: initial; font-size: 30px;">Category: {{Ad.category}}</p>
+<style>
+   h3 {
+      color:red
+   }
+   p {
+      font-size: 10px;
+      color:black;
+   }
+
+
+
+   /* .box {
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    } */
+
+
+
+
+
+   .mmfield {
+      max-height: 300px;
+      min-height: 80px;
+      display: flex;
+      flex-direction: unset;
+      flex-wrap: wrap;
+      max-width: 70%;
+      padding: 5px;
+      border: 5px solid transparent;
+      border-image: linear-gradient(to right, transparent 0%, #08cfee 100%);
+      border-image-slice: 1;
+      margin: auto;
+   }
+   .mmfield>* {
+        flex: 1 1 80px;
+        
+    }
+   .audiofield {
+      width: 70px;
+      height: 70px;
+   }
+   audio{
+      max-width: 70px;
+      height: 70px;
+   }
+   .files_b{
+      max-width: 70px;
+      max-height: 70px;
+      font-size: 10px;
+      border: 1px solid transparent;
+      border-image: linear-gradient(to right, transparent 0%, #08cfee 100%);
+      border-image-slice: 1;
+   }
+   .imgfield{
+      display: flex;
+      justify-content: center;
+      transition: 0.5s;
+   }
+   .imgfield:hover {
+    transform: scale(10.2); /* Увеличиваем масштаб */
+   }
+   .otherfield {
+      align-items: end;
+      justify-content: space-evenly;
+      display: grid;
+   }
+   .otherfield a{
+      text-decoration: none;
+   }
+   .row{
+      border: 1px solid transparent;
+      border-radius: 8px;
+      border-image: linear-gradient(transparent 0%, #08cfee 100%);
+      border-image-slice: 1;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+      padding: 10px;
+   }
+   .comments{
+      display: block;
+      max-width: 700px;
+      min-height: 70px;
+      margin: auto;
+   }
+   .comment{
+      display: flex;
+      max-width: 700px;
+      max-height: 70px;
+      font-size: 10px;
+      border: 1px solid transparent;
+      border-image: linear-gradient(to right, transparent 0%, #08cfee 100%);
+      border-image-slice: 1;
+   }
+   .username, .content, .datum {
+      padding: 10px;
+   }
+   .status, .datum{
+      margin-left: auto;
+   }
+</style>
+<h3> {{ Ad.content }}</h3>
+<!-- {{ result_file }}
+{{ file_extension }}
+   <img src="#">
+   <p>'Ad_files:'{{ad_files}}</p>
+    -->
+   <!-- <h4>Files:</h4> -->
+   <div class="mmfield">
+      
+   {% for file in ad_files %} 
+   
+      {% if file.filetype == 'video' %}
+      <div class="videofield">
+         <video max-width="70px" max-height="70px" controls="controls" poster="video/duel.jpg">
+            <source src="/{{ file.filefield }}" type='video/ogg; codecs="theora, vorbis"'>
+            <source src="/{{ file.filefield }}" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+            <source src="/{{ file.filefield }}" type='video/webm; codecs="vp8, vorbis"'>
+            <source src="/{{ file.filefield }}" type="video/mp4">
+            Тег video не поддерживается вашим браузером. 
+            <a href="/{{ file.filefield }}">Скачайте видео</a>
+       
+         </video>
+      </div>
+      {% endif %}
+
+      {% if file.filetype == 'image' %}
+         <div class="imgfield" style="width: 70px; height: 70px;">
+            <img src="/{{ file.filefield }}" style="max-width:70px; max-height:70px">
+         </div> 
+      {% endif %}
+
+      {% if file.filetype == 'audio' %}
+      <div class="audiofield">
+         <audio controls>
+            <source src="/{{ file.filefield }}" type="audio/mp4">
+            <source src="/{{ file.filefield }}" type="audio/ogg">
+            <source src="/{{ file.filefield }}" type="audio/wav">
+            Your browser does not support the audio tag.
+         </audio> 
+      </div> 
+      {% endif %}
+      {% if file.filetype == 'application' or file.filetype == 'example' or file.filetype == 'model' or file.filetype == 'multipart' or file.filetype == 'text'%}
+         <div class="otherfield" style="max-width: 70px; max-height: 70px;">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAABmJLR0QA/wD/AP+gvaeTAAAA3ElEQVRIie2UsQ6EIAxAy+V+hsHyeY7Kpl9qAu6OvYHkwqWCRSQ63JscaB+VtoqIoCWvptlvEigZxph1XY8NxJDfTmu9LAvP8JMtJTgIEzuqBF3XAQAieu+bCJxziJivo0pARIeO2jeIQUR+UvHTSqkgyPRPOMPhUe9Mlgypa3EetirCDDcUnOAvuEYwz3P8vOHbWisyCCd5mqY4ahxH4fwXrIqvg2fPRBVMct/327YBwDAM8qiTu2gnUSJKVIF8tXGat6mogtLfFXNfBaVbM0XzCnba9Fqesexq+ACg5mJ7+xU0ygAAAABJRU5ErkJggg=="><br />
+            <a href="/{{ file.filefield }}" class="files_b">SHOW FILE</a>
+         </div> 
+      {% endif %}
+   {% endfor %}
+   </div>
+   <p>{{Ad.author}} {{Ad.created_ad}}</p>
+<div class="comments">
+   {% for comment in comments %}
+      {% if comment.accepted %}
+         <div class="comment">
+            <a class="username">
+               {{comment.commAuthor.username}}
+            </a>
+            <p class="content">
+               {{comment.content}}
+            </p>
+            <p class="datum">
+               {{comment.created_at}}
+               {% if comment.accepted %}
+               <img class="status" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABOUlEQVQ4jZWTP0vDQBiHD8QoOOskOCq2IiLqJOoHEBy7+gXi7jdwSGi0VFd1cXRTqWiFImLBFpsMxcW6dLGCqYJI9HFILqZJTewPDo737nn/HL8TIiRgCjAAE3jzlglkgXT4fhAcAPLAF3/LAXKA0g2+iAE7ZH84xY4kwO5/4VK9ybKqsX1yVwjOHNe2r5uHJtOr64zOLLF/aX4DKYH7YD3BB0VLhnUBWDFcHAxQE0AboPz40hUu1X/hw6tILVsA9tbxLWOLa+ydVXqBAV4FYN0/PbOQURkenyV/WklqOzJCFqDaaDGfURmZmGPz6DqpspQmgDSuw/wkfYNDXmUzDnaASemFnIxWGy1WNvSkygBG0IkKcC5P3j8TfVUA+sP/QQF25DgxbRsROJQoBehADdcjbW+v+TMH9APySR2kmO2xGgAAAABJRU5ErkJggg==">
+               {% endif %}
+            </p>
+         </div>
+      {% endif %}
+   {% endfor %}
+</div>
 {% endblock content %}
 

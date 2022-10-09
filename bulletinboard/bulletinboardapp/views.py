@@ -1,15 +1,18 @@
-from socket import AddressInfo
-from django.shortcuts import render
-from django.views.generic import ListView, DetailView,CreateView,UpdateView, DeleteView # импортируем класс, который говорит нам о том, что в этом представлении мы будем выводить список объектов из БД
+from importlib.resources import contents
+from unicodedata import category
+from django.shortcuts import redirect
+from django.views.generic import ListView, DetailView,CreateView,UpdateView, DeleteView
 from django.http import HttpResponse
-from bulletinboardapp.models import *
+from .models import Ad,Comment as Comments,FeedFile, User,Category
 from .forms import *
+#from django.contrib.auth.mixins import PermissionRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
-from .forms import FileFieldForm
+from .forms import AdForm
+import os, re
+#from sign.views import upgrade_me
+#from django.contrib.auth.decorators import login_required
 
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
 
 class Ads(ListView):
     model = Ad
@@ -21,58 +24,106 @@ class Ads(ListView):
         context = super().get_context_data(**kwargs) #получили весь контекст из класса-родителя
         context['is_authors'] = self.request.user.groups.filter(name = 'authors').exists()
         context['user_info'] = self.request.user
-        #добавили новую контекстную переменную is_authors
-        #есть ли пользователь в группе - заходим в переменную запроса self.request/
-        #Из этой переменной мы можем вытащить текущего пользователя
-        #В поле groups хранятся все группы, в которых он состоит
-        #применяем фильтр к этим группам и ищем ту самую, имя которой premium.
-        #проверяем, есть ли какие-то значения в отфильтрованном списке.
-        #Mетод exists() вернёт True, если группа premium в списке групп пользователя найдена
-        #нам нужно получить наоборот — True, если пользователь не находится в этой группе, поэтому добавляем отрицание not
         return context #возвращаем контекст обратно
 
 
 
 
 
-class Ad(DetailView):
+class AdDetail(DetailView):
     model = Ad
-    template_name = 'authors.html'
+    template_name = 'ad.html'
     context_object_name = 'Ad'
+    queryset = Ad.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        print(self.object.id)
+        print('////!!!!', Comments.objects.all().values())
+        ad_filess = FeedFile.objects.filter(file_id = self.object.id).values()
+        context['ad_files'] = FeedFile.objects.filter(file_id = self.object.id).values()
+        context['file_list'] = FeedFile.objects.filter()
+        filename, file_extension = os.path.splitext(str(ad_filess))
+        context['file_extension'] = file_extension[0:-4]
+        context['comments'] = Comments.objects.filter(Ad = self.object)
+        print(self.request.GET.get('pk'))
+        return context
 
 class Author(ListView):
-    model = Author
+    model = User
     template_name = 'authors.html'
     context_object_name = 'authors'
 
 class Comment(ListView):
-    model = Comment
+    model = Comments
     template_name = 'comments.html'
     context_object_name = 'comment_all'
 
-class AdAdd(CreateView):
-    template_name = 'add_ad.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comments'] = Comments.objects.filter(commAuthor_id = self.request.user.id)
+        posts_user = Ad.objects.filter(author=self.request.user)
+        context['comments_all']= []
+        context['posts_all']= []
+        for post in posts_user:
+            context['posts_all'].append(post)
+            com = Comments.objects.filter(Ad = post).values().first()
+            context['comments_all'].append(com)
+        print('!!!!', context['comments_all'])
+        return context
+
+class AdAdd(LoginRequiredMixin,CreateView):
+    template_name = 'add_ad.html'  # Replace with your template.
+    success_url = '/callboard/'  # Replace with your URL or reverse().
+    permission_required = 'bulletinboardapp.add_ad'
     form_class = AdForm
+    print(form_class)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        result_file = FeedFile.objects.all()
+        context['result_file'] = result_file.values()
+        #context['actual_user'] = ((User.objects.filter(id=self.request.user.id).values()).first())['username']
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        post_save_request = super().post(request, *args, **kwargs)
+        if request.method == 'POST':
+            post = Ad.objects.create(
+                author=request.user, 
+                category=Category.objects.get(id = self.request.POST['category']),
+                title=request.POST['title'],
+                content=request.POST['content']
+            )
+            files = request.FILES.getlist('files') # name from forms
+
+            for file in files:
+                filetype = re.split('/',str(file.content_type))[0]
+                print(file.content_type, filetype)
+                files_upload = FeedFile.objects.create(file = post, filefield = file, filetype = re.split('/',str(file.content_type))[0])
+                files_upload.save()
+            print('!!Files:', files)
+        post.save()
+           
+        return post_save_request
+
+
+
+class AdUpdateView(UpdateView):
+    template_name = 'ad_update.html'
+    form_class = AdForm
+    model = Ad
     success_url = '/callboard/'
+    permission_required = 'bulletinboardapp.ad_update'
+        
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Ad.objects.get(pk=id)
 
-    # def author_add(self, request):
-    #     if request.method == 'POST':
-    #         new_author = Author(authors =User.objects.get(username=request.POST.get('username')))
-
-    #     print(self,request )
-    #     return new_author
-    #return redirect('/news/search')
-
-
-# class ad(DetailView):
-#     pass
-# class ads(ListView):
-#     pass
-# class create_ad(CreateView):
-#     pass
-# class edit_ad(UpdateView):
-#     pass
-# class delete_ad(DeleteView):
-#     pass
- 
+class AdDeleteView(DeleteView):
+    template_name = 'ad_delete.html'
+    model = Ad
+    queryset = Ad.objects.all()
+    success_url = '/callboard/'
+    permission_required = 'bulletinboardapp.ad_delete'

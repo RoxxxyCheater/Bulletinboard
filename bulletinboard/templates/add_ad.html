@@ -7,12 +7,31 @@ Add new post
 {% endblock title %}
 
 {% block content %}
-
+<style>
+.row{
+    border: 1px solid transparent;
+    border-radius: 8px;
+    border-image: linear-gradient(transparent 0%, #08cfee 100%);
+    border-image-slice: 1;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+    padding: 10px;
+    min-width: 350px;
+  }
+</style>
 <h1>Add new ad</h1>
-
-<form method="POST">
-    {% csrf_token %} 
+<style type="text/css">
+.ad_add {
+    display: grid;
+}
+</style>
+<form method="POST" class="ad_add form" enctype="multipart/form-data">
+    {% csrf_token %}
+    Author: {{ actual_user }}
     {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
-    <input type="submit" value="Добавить пост">
+    <input href="sign/upgrade/" type="submit" value="Добавить пост">
 </form>
 {% endblock content %}
+
+<!-- {% if is_not_premium %}
+<button> <a > Хочу Premium!</a> </button>
+{% endif %} -->

@@ -5,6 +5,17 @@
 {% endblock title %}
  
 {% block content %}
+
+    <style>
+       .row{
+      border: 1px solid transparent;
+      border-radius: 8px;
+      border-image: linear-gradient(transparent 0%, #08cfee 100%);
+      border-image-slice: 1;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+      padding: 10px;
+    }
+    </style>
     <h1>All ads: {{ ads_all | length }}</h1>
     <h5>{{ time_now | date:'d M Y' }}</h5> <!-- Здесь мы применяем фильтр date. Он очень похож на метод strftime у даты. С его помощью мы можем выводить дату в нужном нам формате -->
     <h6> {{ value1 | default_if_none:"ничего" }} </h6> 
@@ -34,7 +45,9 @@
             {% for ad in ads_all %}
                 <tr>
                     <td>
-                        | {{ ad.title }}
+                        <a href="{% url 'ad' ad.id %}">{{ ad.title | title }}</a> <!-- При нажатии на имя товара в таблцие нас теперь будет перекидывать на страницу с самого товара -->
+                        <a href="{% url 'ad_update' ad.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
+                        <a href="{% url 'ad_delete' ad.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->
                     </td> 
                     <td>
                         | {{ ad.created_ad | date:'d M Y h:m'  }}

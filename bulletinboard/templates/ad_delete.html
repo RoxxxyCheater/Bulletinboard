@@ -1,13 +1,55 @@
 
+<!--  наследуемся от шаблона default.html, который мы создавали ещё во времена flatpages -->
 {% extends 'flatpages/default.html' %}
-
+<!-- Название у нас будет proudcts -->
 {% block title %}
-{{ flatpage.title }}
 {% endblock title %}
-
+ 
+<!-- В контенте на странице мы выводим сам товар, айди которого было передано в адрес -->
 {% block content %}
-   <h2>{{ flatpage.title }}</h2>
-   <hr>
-   <h3>Наши ad_delete:</h3>
-{{ ad_edit }}
+<h2>Вы действительно хотите удалить данный пост?</h2>
+<table>
+    <thead>
+      <tr>
+         <td>
+             Ad
+         </td>
+         <td>
+             Date
+         </td>
+         <td>
+             Content
+         </td>
+         <td>
+             Author
+         </td>
+         <td>
+             Category
+         </td>
+     </tr>
+    </thead>
+    <tr>
+        <td>
+            <a href="{% url 'ad' ad.id %}">{{ ad.title | title }}</a> <!-- При нажатии на имя товара в таблцие нас теперь будет перекидывать на страницу с самого товара -->
+        </td> 
+        <td>
+            | {{ ad.created_ad | date:'d M Y h:m'  }}
+        </td>
+        <td>
+            | {{ ad.content }}  <!-- |truncatechars:50 | Censor:'*censored*' дописываем специальный фильтр, чтобы ограничить количество символов до 20. Все остальные символы превратятся в многоточие. -->
+           <!--| {{ news.content |truncatewords:5 }}  дописываем специальный фильтр, чтобы ограничить количество слов до 5. Все остальные слова превратятся в многоточие. -->
+        </td>
+        <td>
+            | {{ ad.author }}
+        </td>
+        <td>
+            | {{ ad.category }}
+        </td>
+    </tr>
+</table>
+ 
+<form method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Подтвердить удаление">
+</form>
 {% endblock content %}

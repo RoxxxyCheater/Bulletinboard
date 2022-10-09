@@ -23,7 +23,8 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
     <div class="container">
-      <a class="navbar-brand" href="/callboard/">Callboard</a>
+
+      <a class="navbar-brand" href="/callboard/"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADG0lEQVRoge2Yz0sUYRjHP69paElClJLaoSCiDl2TMtJK6BJEQac6dEuI7FD+6KDYH1CXDv0TgUFQJtkpkYIOBWWoFUiUSIcgCE39dph3a3Z9d2dmd2Z2g/3AsrPPvs/3/T4z77zvvANVqlSpUnFI2iLptqQ5SasqH6vWw6ikBpdX4zIPTAKHkz5REZkGThhjfvmDNY6Gg1SeeYAOYCA36LoC88DeNBwVwZwxZp8/4CpgFdiUmqVorBljav0B1xCqVPPg8OYq4L+iWkC5KaaAFbyptg1oB4ZsrDIIsTpumIslDSa3GGcTRwGtjpzWEHlDkupC9F8n6VYlFtAY2Pk/vcawBRRzD1x0xC6FyOsLewWA65Fd+QSCWJbUL2mX/fTbWCrk+nU9SgSPszJijMnyXJuvYQp8AMaACeALsGDj7cBuoAc4AxyIpFrg6g2owBhWwOzh46Wk7gh+emyOcwhFKSDMDbi5QP6KpF5JxrZtknRV0gVJNT6NGknnJF2RtNXGjKQ+Sb9LKSBwuEmqzZP7XVJXTtunvv8nJXXYz6Qv/ignp4sgChRwLETu8TxnPtd8s6T1An1lWJfUHGg6ZAHTKrAYSdoh6bUjr9fR9mYI8xluFPIbdRqdB+4B43izhvBmjNPANWBPTvtXePtrA5wFDuHNKucJv3FaAx4A74E3wJgxZj1v6whnJgzdVnMkRs1hv98k9wMzxpjn9rgzRt0srSQLeOg7Ho9Rd8L/I8lHiVPGmGdWswlYAgLXkgBWgGZjzI9MwHUF1krsJMOC73g5Jt01q/UXVwGfY+gI4Ct4qyhwF6iPQbMBuGM13ch7kRoH9VYvie3mhm2tv4AGSVMxdNJm9d7FoJXL24zfDUPIvv09CYwCcxQ/dg/a78dF5hfiSQKabuQ9SV6WNBvDmZ+1WvnvgQQLaZT0qQTzH+V4FkvtzZwx5ifwogSJKauRRdqvFreVkNvkCqZdwFIJud9cwbQ39cPAdmAnMIW3me8F9ue0mwHu471/PYJX+Eh6NiMgqUXSou9mXZTUUm5fkZDUaWeZeUlHy+2nShT+AKyWeqaAKvZYAAAAAElFTkSuQmCC">Callboard</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -43,6 +44,10 @@
           <li class="nav-item">
             <a class="nav-link" href="/callboard/authors/">Authors</a>
           </li>
+          <li class="nav-item"><a class="nav-link" href="/accounts/logout/">{{ request.user }} - Выйти</a> </li>
+          {% if is_not_authors %}
+          <button> <a href="sign/upgrade/"> Хочу стать автором!</a> </button>
+          {% endif %} 
         </ul>
       </div>
     </div>
