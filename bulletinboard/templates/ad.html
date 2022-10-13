@@ -53,10 +53,17 @@
    .audiofield {
       width: 70px;
       height: 70px;
+      transition: 0.5s;
    }
+
    audio{
       max-width: 70px;
       height: 70px;
+      transition: 2.5s;
+   }
+   audio:hover{
+      max-width: 280px;
+      opacity: 100;
    }
    .files_b{
       max-width: 70px;
@@ -72,7 +79,7 @@
       transition: 0.5s;
    }
    .imgfield:hover {
-    transform: scale(10.2); /* Увеличиваем масштаб */
+    transform: scale(5.2); /* Увеличиваем масштаб */
    }
    .otherfield {
       align-items: end;
@@ -111,6 +118,32 @@
    .status, .datum{
       margin-left: auto;
    }
+   
+   .new-comment {
+      width:70%;
+      margin:20px;
+      margin: 0 auto;
+      background-color: white;
+   }
+   .new-comment textarea {
+   padding:10px;
+      width:100%;
+      resize: vertical;
+      border-radius:15px;
+      border:0;
+      font-size:10px;
+      box-shadow:4px 4px 10px rgba(0,0,0,0.06);
+      height:50px;
+   }
+   .new-comment input{
+      margin-bottom:8px;
+      border-radius:10px;
+      border:0;
+      font-size:10px;
+      box-shadow:inset 0.5px 0.5px 0.5px 0.5px #0cdafaf1;
+   }
+
+
 </style>
 <h3> {{ Ad.content }}</h3>
 <!-- {{ result_file }}
@@ -162,6 +195,11 @@
    {% endfor %}
    </div>
    <p>{{Ad.author}} {{Ad.created_ad}}</p>
+<form class="new-comment" method="post">
+   {% csrf_token %}
+   <textarea rows="4" cols="50" name="subject" placeholder="Введите ваше сообщение:" class="message" required></textarea>
+   <input name="submit" class="btn" type="submit" value="Отправить" />
+</form>
 <div class="comments">
    {% for comment in comments %}
       {% if comment.accepted %}

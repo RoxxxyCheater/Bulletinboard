@@ -48,7 +48,7 @@ class Comment(models.Model):
     Ad = models.ForeignKey(Ad, on_delete=models.CASCADE)
     commAuthor = models.ForeignKey(User,default='Guest ', on_delete=models.CASCADE)
     content = models.TextField()
-    accepted = models.BooleanField(default=False)
+    accepted = models.BooleanField(default=None)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

@@ -11,7 +11,7 @@ from django.views.generic.edit import FormView
 from .forms import AdForm
 import os, re
 #from sign.views import upgrade_me
-#from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 
 class Ads(ListView):
@@ -34,6 +34,7 @@ class AdDetail(DetailView):
     model = Ad
     template_name = 'ad.html'
     context_object_name = 'Ad'
+    permission_required = 'bulletinboardapp.add_ad'
     queryset = Ad.objects.all()
 
     def get_context_data(self, **kwargs):
@@ -49,6 +50,21 @@ class AdDetail(DetailView):
         print(self.request.GET.get('pk'))
         return context
 
+
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            ad_id = self.kwargs.get('pk')
+            new_comment = Comments.objects.create(
+                Ad = Ad.objects.get(id = ad_id),
+                commAuthor= request.user,
+                content =  request.POST.get('subject'),
+                accepted = False,
+            )
+            #print('@@@@',newMailSub, '@@@@', newMailSub.client_title, '@@@@', newMailSub.message, '@@@@', newMailSub.category, '@@@@', newMailSub.subscriber, '@@@@', newMailSub.subscriber_email)
+            new_comment.save()
+        return redirect('/callboard/'+ str(ad_id))
+        
+
 class Author(ListView):
     model = User
     template_name = 'authors.html'
@@ -62,22 +78,29 @@ class Comment(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['comments'] = Comments.objects.filter(commAuthor_id = self.request.user.id)
+        #context['comments'] = Comments.objects.filter(commAuthor_id = self.request.user.id)
         posts_user = Ad.objects.filter(author=self.request.user)
         context['comments_all']= []
         context['posts_all']= []
+
         for post in posts_user:
             context['posts_all'].append(post)
             com = Comments.objects.filter(Ad = post).values().first()
             context['comments_all'].append(com)
-        print('!!!!', context['comments_all'])
         return context
 
     def post(self, request, *args, **kwargs):
-        post_save_request = super().post(request, *args, **kwargs) # переопределение
         if request.method == 'POST':
-            print('fuck', self)
-        return post_save_request
+            decline = request.POST.get('decline')
+            accept = request.POST.get('accept')
+            if decline:
+                comment = Comments.objects.get(id = decline)
+                comment.accepted = False
+            elif accept:
+                comment = Comments.objects.get(id = accept)
+                comment.accepted = True
+            comment.save()
+        return redirect('/callboard/comments/')
         
 class AdAdd(LoginRequiredMixin,CreateView):
     template_name = 'add_ad.html'  # Replace with your template.
