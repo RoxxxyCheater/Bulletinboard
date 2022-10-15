@@ -70,11 +70,10 @@ class Author(ListView):
     template_name = 'authors.html'
     context_object_name = 'authors'
 
-class Comment(ListView):
+class Comment(LoginRequiredMixin, ListView):
     model = Comments
     template_name = 'comments.html'
     context_object_name = 'comment_all'
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -82,7 +81,7 @@ class Comment(ListView):
         posts_user = Ad.objects.filter(author=self.request.user)
         context['comments_all']= []
         context['posts_all']= []
-
+        context['user'] = self.request.user.username
         for post in posts_user:
             context['posts_all'].append(post)
             com = Comments.objects.filter(Ad = post).values().first()
@@ -113,7 +112,7 @@ class AdAdd(LoginRequiredMixin,CreateView):
         context = super().get_context_data(**kwargs)
         result_file = FeedFile.objects.all()
         context['result_file'] = result_file.values()
-        #context['actual_user'] = ((User.objects.filter(id=self.request.user.id).values()).first())['username']
+        context['actual_user'] = ((User.objects.filter(id=self.request.user.id).values()).first())['username']
         return context
     
     def post(self, request, *args, **kwargs):
@@ -156,3 +155,7 @@ class AdDeleteView(DeleteView):
     queryset = Ad.objects.all()
     success_url = '/callboard/'
     permission_required = 'bulletinboardapp.ad_delete'
+
+    def get_object(self, **kwargs):
+        id = self.kwargs.get('pk')
+        return Ad.objects.get(pk=id)

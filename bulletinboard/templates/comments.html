@@ -41,7 +41,7 @@
  }
  
  </style>
- <h1>All comments: {{ comment_all | length }}</h1>
+ <h1>Comments on your Ads:</h1>
 <hr>
  {% if comments_all %} <!-- Если есть товары, то выводим таблицу с ними -->
      <table>
@@ -63,10 +63,11 @@
              </td>
          </tr>
          {% for comment in comment_all %}
+         {% if user == comment.Ad.author.username %}
             {% if not comment.accepted %}
              <tr class="comment">
                 <td>
-                    <p class="post-title"><a class="post-title-link" href="#">| {{comment.Ad.title}} </a></p>
+                    <p class="post-title"><a class="post-title-link" href="#">|{{comment.Ad.created_ad}} {{comment.Ad.title}} </a></p>
                  </td>
                  <td>
                     <a href="#"> {{comment.commAuthor.username}} </a>
@@ -98,7 +99,7 @@
                     <a href="#"> {{comment.commAuthor.username}} </a>
                  </td>
                  <td>
-                    <a href="#">  {{ comment.content }} </a> <!-- |truncatechars:50 | Censor:'*censored*' дописываем специальный фильтр, чтобы ограничить количество символов до 20. Все остальные символы превратятся в многоточие. -->
+                    <a href="/callboard/{{comment.Ad.id}}#{{comment.id}}">  {{ comment.content }} </a> <!-- |truncatechars:50 | Censor:'*censored*' дописываем специальный фильтр, чтобы ограничить количество символов до 20. Все остальные символы превратятся в многоточие. -->
                     <!--| {{ news.content |truncatewords:5 }}  дописываем специальный фильтр, чтобы ограничить количество слов до 5. Все остальные слова превратятся в многоточие. -->
                  </td>
                  <td>
@@ -108,6 +109,7 @@
                 </td>
              </tr>
             {%endif%}
+         {%endif%}
          {% endfor %}
      </table>
      <!-- Проверяем что поддерживается постраничный вывод -->

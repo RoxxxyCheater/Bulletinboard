@@ -7,24 +7,73 @@
 {% block content %}
 
     <style>
-       .row{
-      border: 1px solid transparent;
-      border-radius: 8px;
-      border-image: linear-gradient(transparent 0%, #08cfee 100%);
-      border-image-slice: 1;
-      box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
-      padding: 10px;
-    }
+        body {
+            background: #dae0e6;
+        }
+
+        .row{
+            border: 1px solid transparent;
+            /* border-radius: 8px; */
+            /* border-image: linear-gradient(transparent 0%, #08cfee 100%);
+            border-image-slice: 1; */
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+            padding: 10px;
+            background: none;
+        }
+        .ads_frame{
+            min-height: 90px;
+            max-height: 660px;
+            max-width: 620px;
+            border: 3px solid transparent;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            overflow:hidden;
+            margin: 5px auto;
+            background-color: white;
+        }
+
+        .ad_topic{
+            background: linear-gradient(to top, transparent 0%, #00ddff1c 100%);
+            border-image-slice: 1;
+            display: flex;
+            
+        }
+        .ad_topic a, u , .ad_titles a{
+            text-decoration: none;
+            color: #000000;
+        }
+        .ads_bottom{
+            background: linear-gradient(to bottom, transparent 0%, #79797931 100%);
+            border-image-slice: 1;
+            display: flex;
+        }
     </style>
     <h1>All ads: {{ ads_all | length }}</h1>
-    <h5>{{ time_now | date:'d M Y' }}</h5> <!-- Здесь мы применяем фильтр date. Он очень похож на метод strftime у даты. С его помощью мы можем выводить дату в нужном нам формате -->
-    <h6> {{ value1 | default_if_none:"ничего" }} </h6> 
-    <!-- <h6>{{ form }} </h6> -->
-    <!-- Здесь, если в переменной value1 будет записано None, то выведется текст НИЧЕГО -->
-    <!-- default_if_none не улавливает такие вещи, как пустые строки, пустые списки и т. д. Его задача отследить конкретно переменную None. Для того чтобы отлавливать пустые строки, списки и т. д. используется фильтр default, который имеет точно такой же синтаксис. -->
     <hr>
-    {% if ads_all %} <!-- Если есть товары, то выводим таблицу с ними -->
-        <table>
+    {% if ads_all %} <!-- Если есть ad, то выводим таблицу с ними -->
+    {% for ad in ads_all %}
+        <div class="ads_frame">
+            <div class="ad_topic" style="height: 25px;">
+                <p style="font-weight: bold; color:rgba(0, 0, 0, 0.573);font-style:italic;">{{ ad.category }}</p>
+                <a href="{{ad.author.id}}" style="padding-left: 5px; text-align: left; flex-basis: auto; flex-grow: 20; font-size: 12px; color:gray;align-self: center;">Posted by {{ ad.author }} {{ ad.created_ad | date:'d M Y h:m'  }}</a>
+                <a href="{% url 'ad_update' ad.id %}" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:14px; height: 14px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABmJLR0QA/wD/AP+gvaeTAAABzUlEQVRIia3VO4tTQRQA4M9FooWSXnwsFmIj2LmiqFhZirq4a0BYlUUQ8f1YcRX8GVZrqaCVCBZWIij+BR+NKKKFLjZudrMW91wyuSTBSXIgMHOSe77MmUmG0cUOPMIT7B9h3Y7YhZ9YjVcTJ0aN1LAZHxJo5NgUPmJ7D2wZp4ZFNuBLFPyMcWwJuLqygffsMOrYiW8VbGsX7PEgyFH8xRuM9cE+JdDDXOQYlnT2vtYD2xbjHzH/7zjeBbmP14r96oaNY3cOMqnY1GVMJ0jZmheRq2L1HORkgkxF7l6CLGqfqrKNX3E5B5kOpJkg8xVkX+Rv4W2sYmMO0ohVNGNVcLcPUuZP5yBT2u1qRO5mUuwPDkb+WpK/MyxyowdyNcnP5SAzWNF5hKvIgS7I7RxkMpBmjClaURb7jb2Rvx65Fi7lIPAqHp6J+VwPpNyTFi7mInXFr34R6zCbIL8wEZ8r29XChVyEolWreJbkDvVBzg+CwEIUOZfk1mNPjK8kyOygyBi+R5FNlfdq2qdupfJFsmNC+yY8EthZPFXsWbmSM8Mg8EDntdtK5kuK09jo+XRGvEsKryrauKA4IFl/8/1ireJKXoOXeI73ilWNNP4B0Rm6kC6KEsYAAAAASUVORK5CYII="></u></a> <!-- добавим ссылку на редактирование товара-->
+                <a href="{% url 'ad_delete' ad.id %}" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAE9klEQVRoge2ZTUwqVxiGvzODiMOPOuDQVlvFGqKNSjCgxviDujExjRpTFt6Ni/ambYJp3LgwujBuXFgTTNqFbmTV2N1tumysPw1EgZTUNm24Revt9S9puaUOoDKcbtQYhTsHHbALn2Q2c17O975yzndmEOCRR/6/BIPB/GAwmJ/NGkjqCf1+/3srKytzgUCgZW9vTwYAUF5enqivr/+ho6PjM4vF8qvUNSXD5XJ9brVaTwEAp7qamppOXS7XzEN6TMvCwsIiy7ICpDF/eWm1WmFxcfGLh3OaArfbbTMajedwYRIhhNvb22MOh+PI4XActbW1xRBCVyFqamrONjY22h7W9TXGx8efw4U5iqLw9PR00OPxlF2OezyesqmpqecURV2FmJyc/E2K2rJ0A16v902E0FtiEySTScXo6OiVWbvdHu/p6XmKENL7fD795f3e3t6n29vb3y4vLysAAFZXV9/Z3NxsoWn6VKwGxnjfYrEcpBpL2YWcTufXS0tL70ciEaIutbOzk5dIJBAAQGlpqcAwjJBKx/M8tb+/LwMAkMlk2GAwnJPMr1ar8fDw8DcjIyMfiIoDgYDSZrPFQGQz5vqy2Wwxr9fL3PRL3bxhMpl4k8l0QvCHySkmk+nEYrFEb95PuUT8fn+51+udOD4+NuTl5b07NjZWnn2Lt5mZmfnj/Pz8d47jdhoaGqYsFstexpO43e6PaJrO+ZKhKAq73e4PxfzdWkI3kclkLxmGSZJHlgaVSpWUyWQvxXSiAQDgoKioKGVXySZFRUUCxjhl67yOaACE0KFWq835N8CybJKiqCMxnWiAUCh0zHEcFtO1t7efzs7OPrPb7Xw6jd1u5+fm5p61traeic3HcRwOhULHYjoihoaGTkBk083Pz38FALC+vv7p9UcGuLYp19bWPgEAcDqdy2LzXdQUhWQPAMuyosd9fn5+BACAYZgITdO3xmmaBqVS+S8AgEKheEVQM07ijSiAUqn8i0QnJUql8m8SHVEAjUYj2g2kprCwULSFAhAG4DgueD87maPX64lqEgWorq7+CSHJX5/TghACo9G4TaIlCsAwzAuFQiHaSqWioKAAMwzzgkRLFEAQhEO1Wp2z01itVgsIoUMSLVEAjPFBLk9jrVabRAgRNQ6iANFo9ECv1+csAMdxyVgsJvoYAUAYoLOzM67T6XIWoKSkJNnS0hIj0RIFAABgWZbo/VUKiouLRZ+VLiEOoNFo/rmbnczRaDQRUi1xAJVKRbQmpUClUhF1IIAMAmi12tDd7GSOTqcjrkUcwGAw/Py68Wg0qgcACIfDekG4fWQIggDhcJgDAOB5/o3XzVVRUfELqS9ifD7fE7lcnvb5va6u7mxiYuLHrq6ueDpNd3d3fHJyMlBbW3uWTiOXy7HP53uSjQBdLMsm0hWW6mJZNuHz+bpIfREvIQA4KC4uzvpZwLJsEmO8T6onDkBR1AHHcVkPUFJSkqRpWvouZDabX1VWVibuZoucqqqqc7PZLPrKeUkmSwgaGxu/z+Z7AUIIrFbrd1kr4PF4yvr7+3nI0gYeHBzk/X6/6P8k7sXq6mpXX19fVErjCCE8MDDAb2xsdGbq507rYXNz82232/3l1tZW5+7uLhWPE/0CcguFQgEVFRVJq9W60tTU9HFzc/Ofmc5x7wUdCASUCCH5XT6LMT4zmUxpf8l75JEc8B+CUUiImJDrUwAAAABJRU5ErkJggg=="></u></a> <!-- добавим ссылку на удаление товара -->
+            </div>
+            <div class="ad_titles" style="font-size: 20px; text-align:left; font-weight:bolder;font-style:italic;">
+                <a href="{% url 'ad' ad.id %}" >{{ ad.title | title }}</a> <!-- Ссылка на обьявление --> 
+            </div>
+            <div class="content" style="padding: 0.5rem 1rem; text-align:left; max-height:350px; overflow:hidden;">
+                {{ ad.content }}
+            </div>
+            <div class="ads_bottom">
+                <a href="{% url 'ad_update' ad.id %}" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAADrklEQVRoge2ZTUhVQRTHf9l7mhFmX2RopAWFpkEYViBREEVQQQlRSLQTjLJNLVpkraJFQRQUFC2Cvox2Em1yUaRBi4gUFSJ6YBmBpBhU6tPX4sz1jrd7n/fed9/1PXh/GGbunJk559wzM+fMDOSQWZiXxrEvADWqPA68Ae4BE2nkGTiWAwmb1AUUzaFcnrESEXwcaALOAN9U3XPSOxMChaHIH62uRn0ngBNzIZQf2CkCYpkE8AWIhi2UHzgpUgB8V7TDQTLMC3IwFxgD7qjy0ZB5+4KTRQA2KdqPUCXyiWSK5CGWSQArgmKYrqlVqvK4DW0K+KnKy9LEPzC0IX/8sQ0tinj3BOI4MxbVwKRKVQ70BDBEhjtGwxqPHOgnFb09NIl8YCPJrQHwFFHkXFhC+cFs1ogCw6pNdVhCeUUVpjWchNyNKDEQNPOIyucj08Jr/DMJ9CJR7kVkO38C9Di036/yD0CtR14GJpAfMWxHvI79+cFNuo+7tQHQnwIfPcWBZ2gO1bBIscqHnTS1wUKgBKgAWjGt0Zukz0tSj3rzgTKgAVgP1AF/DeIlRNObHgY8oPoMYlqjMkUh3aIS86DWBGaIElN5uY9BV6lx2oC+FAV0iz7ghirvgGAUAVl8rf7l8oVClY/pleWImX55GMiYWq+Dkcs1osA+YETxn3GuieA9kAtbkb2YZ34jdSCuY3pqxZHFA/6nV7qRz8wdbwDxS5Mw8zyS6jpJN9qBpUAjYpnVQL1BtFNkTWiieccoEsfdUt97DEI2WUSH4bQXGxXZqMg6oFmV3xqV2aLIVkToHiReKwW60Y7SEa1xJitSC2zTvmPIdjwdY+kW+Ypsw4vIvEuB28gOdQ3xH2XIDjYNXZFM9iUJoBM4i0TYEeCQ3sB6r5UNW7ARmJbolU6KZJpFDBQBx1T5o06IWBpmmiKVwHlgARJTbUeODQPAA72hW0XygBZgCXAVb1FyKmgEjlvqepHT4e9kHXciC6vbUn8EM+K8rOrCiH6LkR/4SvEaw2FHdbtGdAuMBiCgW4wgJ8FdwDskAm6wa2idWlZfMqTqXwAHkb37oaVPBXAF8xq0K2Xx/8cUYpU6YK3bTjEl1JZZ2hlTS0/9vsScHRHgveLR7NTAihjiR06R/DLBuDH5ioTWp4ENyNPaZ3/y2qIAmQ2bEYdt91Rhi7t4uyzrUP1aPPbzmgbRDlJW2L1PVCDPyIU2NCumkP28U33XI1Ou2LGHd8SBT8iNptvLwxxyyMGCf3K0IHWFcaotAAAAAElFTkSuQmCC"></u></a> <!-- добавим ссылку на редактирование товара-->
+                <a href="{% url 'ad_delete' ad.id %}" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAABmJLR0QA/wD/AP+gvaeTAAAFGklEQVR4nO2cbYgVVRjHf9d1t31xxbVlqUXZXsw0eoVIKao1e7MXND8kUVCfCr9UVARBYAghUVQYhEQlURQVVBsRZAVJmhW9qAQVW1oWyZZpvmTtsu704X+Gaevu3jl355yZ484PLnMv9555/vPMc888Z85zBkpKSkpKSkpKSkpKSkpKJhcVDzbmAUuBc4BjPdgbiyFgB/AG8H6OOlLTDfQBI0BUsNdGYHYWB+kqAi8BXgK6zOd+YAuKgL8d2azFTGAhcJH5/IP5PJCTnjE5C/gTnenvgKvw01Wk5QrgINL38kR3ZntgS4BpNfa3BjgJ2AQsA36vT5pTbgBeRN1LD/CzL8P9pOtj9gDH+xJVBxX0142A6yeyo6mWvz8A7Evxu3uA3fZyvBGf5C6gNWctQdIG/IUcuTBnLUGyGjmvH5ji0/B9wMfArCrfVdBV7XWgwacoCyrAvSS56WrfAjYbw5dW+a4FOAwMAjN8ikrJNHSC/3vBexddievCNo3pBuYz9lDoDBR9W+sV5JAeNKycDnQC56J0pgX4EVgE7MxNXaCcDHyDIvFzPHQ9c1HeNFbHeyE6kyExD91oiIBrXRv71BhaUuW7ViNkGOhwLSRjXkPHtc62oW0i/SzK4D+r8t1h4CmgCdhvKyRntgPXASfkLSRUHkMR+KptQ69JZEGpAFea9x+5NvYEGuPOdW3II3ej6PsD3TN0ygaUxV/g2pAHGoBVJKOSlT6MtgFzfBhyzIkko6r4tRNYnKeokJiCAmE5sBb4FTlxCLjcpeHz0WC8yaWRHOhAY+K4L3Q2e/gFnjL2HJgO/IKOb1XaRrZjvwFgL/A0CvejiUHUxy8CjgGeyVdOmCxFEfhb2gZlIj2aZrNNPXddOnA0V5vt5lxVBEovupMUoWyjxIIVwCHkvPU5awmKduB5Ro9I9gO3pd1BUWfPfDGEZhnfAb5Hcz7dwDUordmUn7QwaQAeR5F4BE1RlNTBBuTEN/MWEioXIwcOM341mvW88OlomFOLXVhk8wVkBkkR1WnA11ntOG15W19WBnOih+RYMikFjknrwBF05kLlDnQcA3iurq0A2wg7IZ2Dqmoj4OE8BNxkjA9SvYqrqDQCN5JUrv5EiiIpF+HZiP7qPcCjaNbLlnWo+McXU1Fdd7v5vBvd2v/Ko4ZR3I7O4gHqK/OIk1nfryF0IzVenlETVx1kG1qH0QncDzxo2f4W1Iceor4ItiVCUfchBSpLeYDkStZi2fZskqjozFhXMMwkWdBiO2ndhC5CEVr1NGlZi5ywA/tKsC9N27uyFhUSs0mKF1dYtl1v2j2XtajQeAE5Yit2F607TbttLkSFxJkkBTyXWbTrJUktjrZKCGveRs54z6JNF8mVeL4LUSER31+LgAUW7faZNstciMoCX/PCG4FPzHubxPhbsz01WznZ4XNi/SGzXQ6ckrLNLrM9Lns52eDTgX0oohpIH4XxcvzUY1Pf+HTgCPCIeX9zSttx2hM5UZQBvmtjtpttM+lywngcvMeNnIlT9OKieOFL4Z6sEVNkBzaiJ4CAKmMLSZEduAD91eOVlIWkyA6Mbz5soewDrWklceAreQopGueRDOnGqwyLl18dZBLfka5GGgfOIpmXXeNJVzDUcmAzGjdH6HFMzhf/hcZ4DuxAD7OIq6J6/UqrD9t5iixZjIZ37WgSfSVy4hHgVuCD/KQVl39HYLXXXgp8768aviNwmP8/vGwETcK/BTyJVk4Gwz9hFHGhVRYDXQAAAABJRU5ErkJggg=="></u></a> <!-- добавим ссылку на удаление товара -->
+                <a href="{% url 'ad_delete' ad.id %}" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:16px; height: 16px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAACF0lEQVRoge3azYtPURzH8deMmiExCkNKk43EYOOhrPAHSBJrD1vZ2MiOpVjZkSzYKAspOxtJlPJQHqYsxrOIjAhjzFicc/tN052H352He5rOu073nO+5v3s+n3PvPbfO90cmLVpKYh1Yi/kzrGWi/MQz9I12wjJcQT+GEi/9uIzOQnxxR1bgLrpiuw9fJj5JM8pi4amBXmzDh6LzhuC0F9uVP3Kp0IIdeCVovl50rIqBf9hUi7RqbMZgLF2wVzDyvEZRVXkhaN/TigUx+K4+PZV5G48drbXKmEKykdTIRlIjG0mNbCQ1spHUyEZSIxtJjWwkNbKR1MhGUiMbSY1ZZWQg1tvrFFKRQvNAq8ZuXTfa6tFTiXasj/XXReCzsId6uiZRzdKCM4LmT2gr0geHcT7Wbwlb9R9LLvAG98YYYKeQv5hOlmN3HAsO4eLwE04I78tYmaJBbBhlgH3j/HaqywCOF4OPTOh042AUu2hE32ph534/rpYYuY8t6MGPUcxOBd/wWLgLT6tc4KYwE0dK+nbFvveYV1HgpGjmO9IfjyOzvQtxNtZP4ddkRU03j4RZPzAsNgfXYvx2bCdNJ/4IgtfF2FwhnT0kLN8r65HWHOcEwQ9ieyseapjYWJOupjimseRdEvLxRfsJ1tQnbeJcUL6Gf8dJNa1QVejREP8bd3AUS+oUVcZ4/3BYKnwIv+Il/k67osws4T/K2a74+5QyMQAAAABJRU5ErkJggg=="></u></a>
+                <a href="{% url 'ad_delete' ad.id %}" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAADd0lEQVRoge3ZW4hVVRwG8N/MqBV008boQhezh4ygqYx6sIuU0I2osAjyYajoRiC92Et0o6CUwNcg9K2HSgq7GUUXoywqQiWlSApLost0cSoyc04Pa2/W9jgz7evZBOeDzZxz9l7f//vW5b/+aw999NFHH3308f/DmTi4bRFVcSs62IpT6iIdrIuoAE5O/p6Bj3BpHaRtGMliDjbg3qpEbRr5Bl9gCI9hLQ4qS9amkR9wLl5Mvo/ifZxYhqztqbUb1+Lx5PvZ+ADnt6aoAB4RstbHXb/fiD+Se3/h5h7rKoypjMAIvk7ud/AkZvZOWjFMZwTm4m3RzDs4ujfSDsQMYfe+RZj/z+BdYRP8xfRGCNnrKdHMDmHf6QmGcQfWYzwjYqrrpRycd2Nv8vy4kBgmxUAF4SkuwD24yoHz+Vtsw1f4Tki5+/A7XsNYDv7FwogOC4YexkPJ51pwOl63fy9/LyzQpeqd1/OwORPneRxWlfQIrMbfGeINuFLYpZvCoXguE3Mr5pclOw3bM2Sf4OLqGnNjQKjL9iXxx7CkKMn14iLeLWxYbVUG1yQaOkIyOCtvw9sxkTTcjgVNqCuAbiMjeRotE4fyFTUssgoYwP1ip47JeZ65TMzjb+KQhgTmQenFfjx+TBp9mBC1hdLpdwhvJY1+VvKMgFlCr52DC4VpsDS5hnNyLBY7dAIPKrCR3yW6vy7H80NCbXUn1mAjdoprq/ESZTLMFnvg6f94bhQvy1dbdV+NF41PJI3/NPmUuggvYM8k4vZiC9ZhJW7DFVgkjNi8DP9URo7BexnON3BUURNzhIKug0e77l0uLPqs8AlsElLiJfIlhOnOIwuFlxIp/2rhSFAY94mjMTf57QShh7MGvsQKnFQixlRGbkripkfd0RLcCAt2l3jEhKvxq2hgM25QrTjsNjKEVZkYu3BeBX5LMmQjeEDcQX/DciWHuQtZI0fi1UzcTTiuaoC1Cdk24YVZSv6pGt/RikZ24vNMnEov6FIMCqe39HCUkq9Xf1mSGslmuuV1kS/sIu8I+8OsugJkkDXyk5DtasMK+5v4THNV7jIN/FshxbOiiT2af/WyQDOjbYdoZFUTAXqBmfhH3IiObVdOeZwqjsaalrWUxqBQyKVY15aQqhgUynHCiGxsUUslzBCqzQkhHY63K6c65uPwtkX0gX8B+YEw2YLBBkIAAAAASUVORK5CYII="></u></a>
+            </div>
+        </div>
+    {% endfor %}
+        <!-- <table>
             <tr>
                 <td>
                     Ad
@@ -43,11 +92,12 @@
                 </td>
             </tr>
             {% for ad in ads_all %}
-                <tr>
-                    <td>
+                <tr class="ad">
+                    <td class="ad_topic">
                         <a href="{% url 'ad' ad.id %}">{{ ad.title | title }}</a> <!-- При нажатии на имя товара в таблцие нас теперь будет перекидывать на страницу с самого товара -->
-                        <a href="{% url 'ad_update' ad.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
-                        <a href="{% url 'ad_delete' ad.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->
+                        <!-- <a href="{% url 'ad_update' ad.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
+                        <!-- <a href="{% url 'ad_delete' ad.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->
+                    <!-- <hr>
                     </td> 
                     <td>
                         | {{ ad.created_ad | date:'d M Y h:m'  }}
@@ -55,7 +105,7 @@
                     <td>
                         | {{ ad.content }}  <!-- |truncatechars:50 | Censor:'*censored*' дописываем специальный фильтр, чтобы ограничить количество символов до 20. Все остальные символы превратятся в многоточие. -->
                        <!--| {{ news.content |truncatewords:5 }}  дописываем специальный фильтр, чтобы ограничить количество слов до 5. Все остальные слова превратятся в многоточие. -->
-                    </td>
+                    <!-- </td>
                     <td>
                         | {{ ad.author }}
                     </td>
@@ -64,7 +114,7 @@
                     </td>
                 </tr>
             {% endfor %}
-        </table>
+        </table> --> 
         <!-- Проверяем что поддерживается постраничный вывод -->
         {% if is_paginated %}
             

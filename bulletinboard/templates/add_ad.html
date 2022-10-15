@@ -7,29 +7,71 @@ Add new post
 {% endblock title %}
 
 {% block content %}
-<style>
-.row{
-    border: 1px solid transparent;
-    border-radius: 8px;
-    border-image: linear-gradient(transparent 0%, #08cfee 100%);
-    border-image-slice: 1;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
-    padding: 10px;
-    min-width: 350px;
-  }
-</style>
-<h1>Add new ad</h1>
-<style type="text/css">
-.ad_add {
-    display: grid;
-}
-</style>
-<form method="POST" class="ad_add form" enctype="multipart/form-data">
-    {% csrf_token %}
-    Author: {{ actual_user }}
-    {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
-    <input href="sign/upgrade/" type="submit" value="Добавить пост">
+    <style>
+    body {
+      background: #dae0e6;
+    }
+    .row{
+        border: 1px solid transparent;
+        border-radius: 8px;
+        /* border-image: linear-gradient(transparent 0%, #08cfee 100%);
+        border-image-slice: 1; */
+        box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
+        padding: 10px;
+        min-width: 350px;
+    }
+    .add-form{
+      min-height: 90px;
+      max-width: 620px;
+      border: 3px solid  #00ddff1c;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      margin: 5px auto;
+      background-color: white;
+   }
+   /* .id_add {
+        display: grid;
+    } */
+    .ad_author, #id_category, #id_title{
+        margin-bottom: 0;
+        color: blue;
+        width: 25%;
+        margin: 0 auto;
+    }
+    .id_add label[for="id_content"] {
+        display: none;
+    }
+    /* .id_add label[for="id_files"] {
+        display: none;
+    } */
+    /* .id_add label[for="id_check_box"] {
+        display: none;
+    }
+    .id_add label[for="id_check_box"]:focus-visible {
+        display: block;
+    } */
+    .id_add label + input:focus {
+        display: none!important;
+    }
+            
+    .id_add textarea {
+        height: 80px;
+        margin: 5px;
+        width:85%;
+        border: 3px solid transparent;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+    </style>
+    <div class="add-form">
+        <h1>Add new ad</h1>
+    <form method="POST" class="id_add form" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p class="ad_author">Author: {{ actual_user }}</p>
+        {{ form }} <!-- Теперь нам нужна только готовая форма и кнопка -->
+        <input href="sign/upgrade/" type="submit" value="Добавить пост">
 </form>
+</div>
 {% endblock content %}
 
 <!-- {% if is_not_premium %}

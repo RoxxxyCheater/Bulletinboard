@@ -7,11 +7,11 @@ from django import forms
 class AdForm(forms.ModelForm):
     check_box = BooleanField(label='Я ознакомлен в полном обьёме с правилами ресурса, относительно публикаций и обработки персональных данных авторов статей. Данным действием Соглашаюсь с правилами ресурса.')  #добавляем галочку или же true-false поле , 'check_box'
     files = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True, 'name': 'files'}), required=False)
-    print('!Files:', files)
+    
     # в класс мета, как обычно, надо написать модель, по которой будет строиться форма и нужные нам поля. Мы уже делали что-то похожее с фильтрами.
     class Meta:
         model = Ad
-        fields = ['author','category','title', 'content','files', 'check_box']
+        fields = ['category','title', 'content','files', 'check_box']
         
 
 
