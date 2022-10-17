@@ -6,21 +6,21 @@
  
 {% block content %}
 <style>
-.row{
-   border: 1px solid transparent;
-   border-radius: 8px;
-   border-image: linear-gradient(transparent 0%, #08cfee 100%);
-   border-image-slice: 1;
-   box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
-   padding: 10px;
-   min-width: 350px;
- }
  .comment{
     height: 80px;
     border: 3px solid transparent;
     border-radius: 8px;
+    margin: 15px auto;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
  }
+ .comment a{
+    font-size: 12px;
+ }
+ .comment button {
+    border: none;
+    outline: none;
+    background: none;
+}
  .post-title{
     border: 3px solid transparent;
     background-color:#f5fafa;
@@ -38,36 +38,22 @@
  }
  table{
     margin: auto;
+    border-collapse: separate;
+    border-spacing: 7px 11px;
+
  }
  
  </style>
- <h1>Comments on your Ads:</h1>
-<hr>
+ <div class="ad_titles">Comments on your Ads:<hr></div>
  {% if comments_all %} <!-- Если есть товары, то выводим таблицу с ними -->
      <table>
-         <tr>
-            <td>
-                Post
-            </td>
-             <td>
-                 Author
-             </td>
-             <td>
-                Content
-             </td>
-             <td>
-                Date
-             </td>
-             <td>
-                Status
-             </td>
-         </tr>
+
          {% for comment in comment_all %}
          {% if user == comment.Ad.author.username %}
             {% if not comment.accepted %}
              <tr class="comment">
                 <td>
-                    <p class="post-title"><a class="post-title-link" href="#">|{{comment.Ad.created_ad}} {{comment.Ad.title}} </a></p>
+                    <p class="post-title"><a class="post-title-link" href="{{comment.Ad.id}}">| {{comment.Ad.title}}</a><br><a class="post-title-link">{{comment.Ad.created_ad}}</a></p>
                  </td>
                  <td>
                     <a href="#"> {{comment.commAuthor.username}} </a>
@@ -76,7 +62,7 @@
                     <a href="#">  {{ comment.content }} </a> <!-- |truncatechars:50 | Censor:'*censored*' дописываем специальный фильтр, чтобы ограничить количество символов до 20. Все остальные символы превратятся в многоточие. -->
                     <!--| {{ news.content |truncatewords:5 }}  дописываем специальный фильтр, чтобы ограничить количество слов до 5. Все остальные слова превратятся в многоточие. -->
                  </td>
-                 <td>
+                 <td style="display:block; margin-top:10px;">
                     <form method="POST">  
                         <button type="submit" name="accept" value="{{comment.id}}">
                             {% csrf_token %}
@@ -87,6 +73,8 @@
                             <img style="height: 27px; width: 27px; border: 1px solid transparent; border-radius: 8px;border-image-slice: 1;box-shadow: 0 0 10px rgba(0,0,0,0.5);" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAADt0lEQVRoge2ZTWvcVhSG3+ORlnG7aOLQdBkwtJs6GeOQNv7AYHBxsAsXwzCLyQ/I/JYukj8wi5GJnYWDF954Y4dSikOT4G2h7aJN4tbBoWSRRDpvF5ImJpZGV9KopmXezQgz3Ps8o/t5DAwzzDD/6YjNl16vNFaouEsShN4e3VrfrALmr6uzK6q8CxIMeHvs4GFmP5kCfy83jVDXSDogATJQldZH2/e6g8EOczgxawCugXSoYT8AW2MH3/ftZyQnPEjUBNp5tWiaFcIDZI2qnRefX+vbT6pACnyvcSg7rxa+LS2RAg9SAWVNlZ0/xidT+0kcQtGY30iBB9nryCfZ/Hhnc70Q/JW5VVC7KfDv+1H6SppLPz968GEbiW8gmrBZ8Ii+0z2eu7laITxIOkK9k9ROskBM3R8+fnYI5JLICQ9QQWViW8kC1HY4PDLho2c4VHaPpr/JlCgI74NsWwuMbq1vQtkA6VvA94aTEN7LrxZTJ9zhxKwpAB+I8talX5+cGv+pAgBwbnvjvgANRhIZ8HHHNVI7L68tnJLIWG36wbc+/e1J6l7Qdx84t71xnwzfhAV8CEPWFOz8OTnfk6gKHrA8ShzPLxsAIUB/+PBv0U5KoEU/eFMVvLUAABzP3Vwl0AXhWMBHzxq/uVwTltDmZ788tdpbrAUA4Hh2yZDikepawPcAq/jlCwkAwNGNJSNQD0r3rOELCQDA0fVFA6gH0j1L+MICocSCodKD0j0r+FICAHA0NW+o8Ei6ZwFfWgAADuvzRjQIJf5leABwygogCEBQ8sCrMnj8OvjhnfbdR61SqoUiO2wIrz++pXxdE3S2Pvmy1KWosEA5eFx3IKhBau7ISGfnwpXCEoXmwIDg4YjADT8DUFozh/vVL6MVwMcQAQtI5BKoED5ObglrgaJH4p/s4eP4FGnOPN+3OsxZTeIy5/m35HcO5J0lPAA4Qnq7F9JLKSeT+QYGcRnZOj9hXBHPhbgZ8CdjNZz6tjXIm9TO+bpxR+AJ4Nrx20mkClRxDdy7WDcgPAxQIlEgqhJv5IS3ukntXpxcFbKLfMcYH4CZfmFZmYtK3JVcA2ee769TpBlB2cYBYF+ZA8mq7rAlJBKTXJkL2EavqDVY+IISPgD7ytzYwcNNUW2Q6mdVzIrAn5SAoJEhEZByK2n8AxnL6LMvpgyCsB5UxWUkTrQ6reH0xC6+jMZ5Nj5loPE/OgYPHydBovxGFuf3y/Vlod6JJnY7rdBaNntj9WW8X23aacNmmGGG+R/lH9jQPofrfpcrAAAAAElFTkSuQmCC">
                         </button>
                     </form>
+                </td>
+                <td style="display:block; margin-top: 10px;">
                     <p class="commdatum">{{ comment.created_at | date:'d M Y h:m'  }}</p>
                 </td>
              </tr>

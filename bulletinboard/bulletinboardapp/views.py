@@ -138,7 +138,7 @@ class AdAdd(LoginRequiredMixin,CreateView):
 
 
 
-class AdUpdateView(UpdateView):
+class AdUpdateView(LoginRequiredMixin,UpdateView):
     template_name = 'ad_update.html'
     form_class = AdForm
     model = Ad
@@ -149,7 +149,7 @@ class AdUpdateView(UpdateView):
         id = self.kwargs.get('pk')
         return Ad.objects.get(pk=id)
 
-class AdDeleteView(DeleteView):
+class AdDeleteView(LoginRequiredMixin,DeleteView):
     template_name = 'ad_delete.html'
     model = Ad
     queryset = Ad.objects.all()

@@ -43,12 +43,7 @@
       text-decoration: none;
       color: #000000;
    }
-   .ad_titles hr{
-      color: rgb(255, 255, 255);
-      border: 1px solid transparent;
-      border-image: linear-gradient(to left, transparent 0%, #08cfee 100%);
-      border-image-slice: 1;
-   }
+
    .ad_titles p{
       padding-top: 10px;
       padding-left: 55px;
@@ -70,7 +65,7 @@
       border: 1px solid transparent;
       border-image: linear-gradient(to bottom, transparent 0%, #08cfee 100%);
       border-image-slice: 1;
-      margin: auto;
+      margin: 20px auto;
    }
    .mmfield>* {
         flex: 1 1 80px;
@@ -194,7 +189,7 @@
       <div class="ads_frame">
          <div class="ad_topic">
              <p style="font-weight: bold; color:rgba(0, 0, 0, 0.573);font-style:italic;">{{ Ad.category }}</p>
-             <a href="{{Ad.author.id}}" style="padding-left: 5px; text-align: left; flex-basis: auto; flex-grow: 20; font-size: 12px; color:gray;align-self: center;">Posted by {{ Ad.author }} {{ Ad.created_ad | date:'d M Y h:m'  }}</a><a>{{Ad.author}} {{Ad.created_ad}}</a>
+             <a href="{{Ad.author.id}}" style="padding-left: 5px; text-align: left; flex-basis: auto; flex-grow: 20; font-size: 12px; color:gray;align-self: center;">Posted by {{ Ad.author }} {{Ad.created_ad }}</a><!-- <a>{{ Ad.created_ad | date:'d M Y h:m'  }}{{Ad.author}} </a> -->
              <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:14px; height: 14px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAABmJLR0QA/wD/AP+gvaeTAAABzUlEQVRIia3VO4tTQRQA4M9FooWSXnwsFmIj2LmiqFhZirq4a0BYlUUQ8f1YcRX8GVZrqaCVCBZWIij+BR+NKKKFLjZudrMW91wyuSTBSXIgMHOSe77MmUmG0cUOPMIT7B9h3Y7YhZ9YjVcTJ0aN1LAZHxJo5NgUPmJ7D2wZp4ZFNuBLFPyMcWwJuLqygffsMOrYiW8VbGsX7PEgyFH8xRuM9cE+JdDDXOQYlnT2vtYD2xbjHzH/7zjeBbmP14r96oaNY3cOMqnY1GVMJ0jZmheRq2L1HORkgkxF7l6CLGqfqrKNX3E5B5kOpJkg8xVkX+Rv4W2sYmMO0ohVNGNVcLcPUuZP5yBT2u1qRO5mUuwPDkb+WpK/MyxyowdyNcnP5SAzWNF5hKvIgS7I7RxkMpBmjClaURb7jb2Rvx65Fi7lIPAqHp6J+VwPpNyTFi7mInXFr34R6zCbIL8wEZ8r29XChVyEolWreJbkDvVBzg+CwEIUOZfk1mNPjK8kyOygyBi+R5FNlfdq2qdupfJFsmNC+yY8EthZPFXsWbmSM8Mg8EDntdtK5kuK09jo+XRGvEsKryrauKA4IFl/8/1ireJKXoOXeI73ilWNNP4B0Rm6kC6KEsYAAAAASUVORK5CYII="></u></a> <!-- добавим ссылку на редактирование товара-->
              <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAE9klEQVRoge2ZTUwqVxiGvzODiMOPOuDQVlvFGqKNSjCgxviDujExjRpTFt6Ni/ambYJp3LgwujBuXFgTTNqFbmTV2N1tumysPw1EgZTUNm24Revt9S9puaUOoDKcbtQYhTsHHbALn2Q2c17O975yzndmEOCRR/6/BIPB/GAwmJ/NGkjqCf1+/3srKytzgUCgZW9vTwYAUF5enqivr/+ho6PjM4vF8qvUNSXD5XJ9brVaTwEAp7qamppOXS7XzEN6TMvCwsIiy7ICpDF/eWm1WmFxcfGLh3OaArfbbTMajedwYRIhhNvb22MOh+PI4XActbW1xRBCVyFqamrONjY22h7W9TXGx8efw4U5iqLw9PR00OPxlF2OezyesqmpqecURV2FmJyc/E2K2rJ0A16v902E0FtiEySTScXo6OiVWbvdHu/p6XmKENL7fD795f3e3t6n29vb3y4vLysAAFZXV9/Z3NxsoWn6VKwGxnjfYrEcpBpL2YWcTufXS0tL70ciEaIutbOzk5dIJBAAQGlpqcAwjJBKx/M8tb+/LwMAkMlk2GAwnJPMr1ar8fDw8DcjIyMfiIoDgYDSZrPFQGQz5vqy2Wwxr9fL3PRL3bxhMpl4k8l0QvCHySkmk+nEYrFEb95PuUT8fn+51+udOD4+NuTl5b07NjZWnn2Lt5mZmfnj/Pz8d47jdhoaGqYsFstexpO43e6PaJrO+ZKhKAq73e4PxfzdWkI3kclkLxmGSZJHlgaVSpWUyWQvxXSiAQDgoKioKGVXySZFRUUCxjhl67yOaACE0KFWq835N8CybJKiqCMxnWiAUCh0zHEcFtO1t7efzs7OPrPb7Xw6jd1u5+fm5p61traeic3HcRwOhULHYjoihoaGTkBk083Pz38FALC+vv7p9UcGuLYp19bWPgEAcDqdy2LzXdQUhWQPAMuyosd9fn5+BACAYZgITdO3xmmaBqVS+S8AgEKheEVQM07ijSiAUqn8i0QnJUql8m8SHVEAjUYj2g2kprCwULSFAhAG4DgueD87maPX64lqEgWorq7+CSHJX5/TghACo9G4TaIlCsAwzAuFQiHaSqWioKAAMwzzgkRLFEAQhEO1Wp2z01itVgsIoUMSLVEAjPFBLk9jrVabRAgRNQ6iANFo9ECv1+csAMdxyVgsJvoYAUAYoLOzM67T6XIWoKSkJNnS0hIj0RIFAABgWZbo/VUKiouLRZ+VLiEOoNFo/rmbnczRaDQRUi1xAJVKRbQmpUClUhF1IIAMAmi12tDd7GSOTqcjrkUcwGAw/Py68Wg0qgcACIfDekG4fWQIggDhcJgDAOB5/o3XzVVRUfELqS9ifD7fE7lcnvb5va6u7mxiYuLHrq6ueDpNd3d3fHJyMlBbW3uWTiOXy7HP53uSjQBdLMsm0hWW6mJZNuHz+bpIfREvIQA4KC4uzvpZwLJsEmO8T6onDkBR1AHHcVkPUFJSkqRpWvouZDabX1VWVibuZoucqqqqc7PZLPrKeUkmSwgaGxu/z+Z7AUIIrFbrd1kr4PF4yvr7+3nI0gYeHBzk/X6/6P8k7sXq6mpXX19fVErjCCE8MDDAb2xsdGbq507rYXNz82232/3l1tZW5+7uLhWPE/0CcguFQgEVFRVJq9W60tTU9HFzc/Ofmc5x7wUdCASUCCH5XT6LMT4zmUxpf8l75JEc8B+CUUiImJDrUwAAAABJRU5ErkJggg=="></u></a> <!-- добавим ссылку на удаление товара -->
          </div>
@@ -252,12 +247,15 @@
       {% endif %}
    {% endfor %}
    </div>
-   
+{% if request.user.is_authenticated %}   
 <form class="new-comment" method="post">
    {% csrf_token %}
    <textarea rows="4" cols="50" name="subject" placeholder="Введите ваше сообщение:" class="message" required></textarea>
    <input name="submit" class="btn" type="submit" value="Отправить" />
 </form>
+{% else %}
+  <p><a href="/accounts/login/">Authorize</a> to write a comment</p>
+{% endif %}
 <!-- <details>
    <summary>Show comments</summary> -->
    <div class="comments">
