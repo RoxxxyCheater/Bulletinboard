@@ -12,7 +12,7 @@ from .forms import AdForm
 import os, re
 #from sign.views import upgrade_me
 from django.contrib.auth.decorators import login_required
-
+from django.core.mail import send_mail
 
 class Ads(ListView):
     model = Ad

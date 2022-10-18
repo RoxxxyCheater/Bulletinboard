@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+from ignore import SECRET_KEY, EMAIL_HOST_PASSWORD, DEFAULT_FROM_EMAIL, EMAIL_HOST_USER
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,7 +27,7 @@ SECRET_KEY = 'django-insecure-lvp*w*rqj387g7%cf#ux9**5$d&!bbl_+o@jq7*h)#bg@f45@z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
 
 
 # Application definition
@@ -155,11 +157,23 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_FORMS = {'signup': 'sign.models.BasicSignupForm'}
 LOGIN_REDIRECT_URL = '/callboard/'
-
-
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL= '/callboard/'
+ACCOUNT_EMAIL_CONFIRMATION_HMAC = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_CONFIRMATION_COOLDOWN = 180 
+ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5 
+ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 FILE_UPLOAD_HANDLERS = [
     'django.core.files.uploadhandler.MemoryFileUploadHandler',
     'django.core.files.uploadhandler.TemporaryFileUploadHandler',
     ]
-
-
+ALLOWED_HOSTS = ['127.0.0.1']
+SECRET_KEY = SECRET_KEY
+DEFAULT_FROM_EMAIL = "EMAIL"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = EMAIL_HOST_USER
+EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
+EMAIL_USE_SSL = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
