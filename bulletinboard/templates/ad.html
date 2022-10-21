@@ -22,6 +22,12 @@
       padding: 10px;
       background: none;
    }
+   .row{
+      border: 1px solid transparent;
+      border-image: linear-gradient(transparent 0%, #08cfee 100%);
+      border-image-slice: 1;
+      overflow: hidden;
+   }
    .postframe{
       min-height: 90px;
       max-width: 620px;
@@ -53,7 +59,53 @@
       border-image-slice: 1;
       display: flex;
    }
+   .slider {
+      display: flex;
+      justify-content: center;
+      min-width: 100px;
+      min-height: 500px;
+      max-height: 70%;
+      align-items: center;
+      position: relative;
+   }
+   .slider img { 
+      width: 40%; 
+      height: 100%;
+      width: 90%;
+   }
 
+  .sliderButton {
+      display: flex;
+      height: 100%;
+      justify-content: center;
+      color: #ff3f3f;
+      align-items: center;
+      position: absolute;
+      top: 50%;
+      opacity: 50%;
+      transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+      background-color: #555;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+   }
+   #next{
+      right: -6.5%;
+      color: #cccccc;
+   }
+   #prev{
+      left: 0%;
+      color: #cccccc;
+   }
+   .sliderButton:active{
+      opacity: 60%;
+      color: black;
+   }
+   .sliderButton .sidebutton{
+      width: 20px;
+      height: 45px;
+   }
    .mmfield {
       max-height: 300px;
       min-height: 50px;
@@ -110,15 +162,7 @@
    .otherfield a{
       text-decoration: none;
    }
-   .row{
-      border: 1px solid transparent;
-      border-image: linear-gradient(transparent 0%, #08cfee 100%);
-      border-image-slice: 1;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-      padding: 10px;
-      background: none;
-      overflow: hidden;
-   }
+
    .comments{
       display: block;
       max-width: 700px;
@@ -166,7 +210,7 @@
    }
    @keyframes select{
    0%{
-    background:#d8277b;
+      background:#d8277b;
    }
    }
    @-webkit-keyframes select{
@@ -175,17 +219,12 @@
    }
    }
    .comments:target{
-   animation:select 5s linear;
-   -webkit-animation:select 5s linear;
+      animation:select 5s linear;
+      -webkit-animation:select 5s linear;
    }
 </style>
 <div class="postframe">
-   <!-- <div class="ad_topic" style="height: 25px;"></div>
-      <p style="font-weight: bold; color:rgba(0, 0, 0, 0.573);font-style:italic;">{{ Ad.category }}</p>
-      <a href="{{Ad.author.id}}" style="padding-left: 5px; text-align: left; flex-basis: auto; flex-grow: 20; font-size: 12px; color:gray;align-self: center;">Posted by {{ Ad.author }} {{ Ad.created_ad | date:'d M Y h:m'  }}</a>
-      <hr>
-      <h1>{{ Ad.title }}</h1>
-      <h3> {{ Ad.content }}</h3> -->
+
       <div class="ads_frame">
          <div class="ad_topic">
              <p style="font-weight: bold; color:rgba(0, 0, 0, 0.573);font-style:italic;">{{ Ad.category }}</p>
@@ -196,20 +235,29 @@
          <div class="ad_titles" style="font-size: 20px; text-align:left; font-weight:bolder;font-style:italic;">
              <p >{{ Ad.title | title }}</p> 
          <hr>
-         </div>
+         </div> 
          <div class="content" style="padding: 0.5rem 1rem; text-align:left; font-size: small;">
-             {{ Ad.content }}
+            <div class="slider" id="dispalyed_pict">             
+               {% for file in ad_files %}
+                  {% if file.filetype == 'image' %}
+                     <img class="bigimage" alt="IMAGE!" id="pict" src="/{{ file.filefield }}" style="display:none;">
+                  {% endif %}
+               {% endfor %}
+               <button class="sliderButton" id="prev"><img class="sidebutton" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABkUlEQVRoge3aT0rDQBTH8e+THsGF9xhyEKHFjaDL6nUEvUBVKiJ4jiZ3ELxG5blR6KKT5s+bzBvIW4b+yPskzWSGCcw1V5KSqU7UNM2lqj4CC1W9q6rq3TJzZtlsS0NXqvoGXADnIvJknUkO+WtoAywODv9YZ5JCIg3tReTeMgMJIXVdr45dVRG5DSF8WGX+K8nDXtf1Cng50tBNCOHZKnNY5pAcCDCG5EKAISQnAowguRFgAPGAgJEQLwgYAfGEgIEQbwgYAPGIgJ4QrwjoAfGMgI4Q7wjoACkBAScgpSCgBVISAiKQ0hAQWSGqqkZ+H72DQzKWFT3Jbrdbisgrx5edG6uMVbVerZIwJ297KZhO/98SMJ0fRO+YXiOKZ0zvodErZtAY7xEz+GXlDTPqresJM3r64AVjMg/ygDGb0OXGmM5Mc2LMp9i5MEnWCjkwyRY9U2OSrt5iG5uquqyq6tMqA4l3dUMIWxG5BvYHhxci8mCZgQn22WONWWcm+fIhhLBV1SXwBXyr6jpFZq65EtQv2iIsK/ObMl0AAAAASUVORK5CYII="></button>
+               <button class="sliderButton" id="next"><img class="sidebutton" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABsElEQVRoge3ZTUoDQRDF8X9pbuDOa3Tu4SYigqDb4HVEL5Aoooj3mMwZXHgKIVpuFII6H11dPdPCvGUPb3i/CVlMAlOmZIm0XdxsNsfADfAGXM7n8+euG1o6HtlruqCqAlwDB8Ah8FDX9UnbzSwdrzRCRESBj52jmaqu2oZZOl5phACIyBLY7hz1wUR3PNIKCSE8qerpH8PWdV2feXU80vpl/05VVQsRuQNmO8fvInIRQlh5dVLSC2IdNiSmN8Q6bChMFMQ6bAhMNMQ6LDfGBLEOy4kxQ6zDcmGSINZhOTDJEOswb4wLxDrME+MGsQ7zwrhCrMM8MO4Q67BUTBaIdVgKJhvEOsyKyQqxDrN0skOsw2I7rW+IXhGRpgemXp3sn8jXz0O3/H6y5yGEtVcnK2QoBGSEDImATJChEZABMgYCnCFjIcARMiYCnCBjI8ABUgICEiGlICABUhICjJDSEGCAlIiASEipCIiAlIyAnpDSEdAD8h8Q0AGpqupIRB5/DNqKyFkI4d6r45Guf3WvYgdZOh7pemffNwyydJLTClHVJfAKvKjqos8gS2fKlILzCUXvGDP9QrX0AAAAAElFTkSuQmCC"></button>
+            </div>
+            {{ Ad.content }}
          </div>
          <div class="ads_bottom">
              <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAADrklEQVRoge2ZTUhVQRTHf9l7mhFmX2RopAWFpkEYViBREEVQQQlRSLQTjLJNLVpkraJFQRQUFC2Cvox2Em1yUaRBi4gUFSJ6YBmBpBhU6tPX4sz1jrd7n/fed9/1PXh/GGbunJk559wzM+fMDOSQWZiXxrEvADWqPA68Ae4BE2nkGTiWAwmb1AUUzaFcnrESEXwcaALOAN9U3XPSOxMChaHIH62uRn0ngBNzIZQf2CkCYpkE8AWIhi2UHzgpUgB8V7TDQTLMC3IwFxgD7qjy0ZB5+4KTRQA2KdqPUCXyiWSK5CGWSQArgmKYrqlVqvK4DW0K+KnKy9LEPzC0IX/8sQ0tinj3BOI4MxbVwKRKVQ70BDBEhjtGwxqPHOgnFb09NIl8YCPJrQHwFFHkXFhC+cFs1ogCw6pNdVhCeUUVpjWchNyNKDEQNPOIyucj08Jr/DMJ9CJR7kVkO38C9Di036/yD0CtR14GJpAfMWxHvI79+cFNuo+7tQHQnwIfPcWBZ2gO1bBIscqHnTS1wUKgBKgAWjGt0Zukz0tSj3rzgTKgAVgP1AF/DeIlRNObHgY8oPoMYlqjMkUh3aIS86DWBGaIElN5uY9BV6lx2oC+FAV0iz7ghirvgGAUAVl8rf7l8oVClY/pleWImX55GMiYWq+Dkcs1osA+YETxn3GuieA9kAtbkb2YZ34jdSCuY3pqxZHFA/6nV7qRz8wdbwDxS5Mw8zyS6jpJN9qBpUAjYpnVQL1BtFNkTWiieccoEsfdUt97DEI2WUSH4bQXGxXZqMg6oFmV3xqV2aLIVkToHiReKwW60Y7SEa1xJitSC2zTvmPIdjwdY+kW+Ypsw4vIvEuB28gOdQ3xH2XIDjYNXZFM9iUJoBM4i0TYEeCQ3sB6r5UNW7ARmJbolU6KZJpFDBQBx1T5o06IWBpmmiKVwHlgARJTbUeODQPAA72hW0XygBZgCXAVb1FyKmgEjlvqepHT4e9kHXciC6vbUn8EM+K8rOrCiH6LkR/4SvEaw2FHdbtGdAuMBiCgW4wgJ8FdwDskAm6wa2idWlZfMqTqXwAHkb37oaVPBXAF8xq0K2Xx/8cUYpU6YK3bTjEl1JZZ2hlTS0/9vsScHRHgveLR7NTAihjiR06R/DLBuDH5ioTWp4ENyNPaZ3/y2qIAmQ2bEYdt91Rhi7t4uyzrUP1aPPbzmgbRDlJW2L1PVCDPyIU2NCumkP28U33XI1Ou2LGHd8SBT8iNptvLwxxyyMGCf3K0IHWFcaotAAAAAElFTkSuQmCC"></u></a> <!-- добавим ссылку на редактирование товара-->
              <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAYAAACOEfKtAAAABmJLR0QA/wD/AP+gvaeTAAAFGklEQVR4nO2cbYgVVRjHf9d1t31xxbVlqUXZXsw0eoVIKao1e7MXND8kUVCfCr9UVARBYAghUVQYhEQlURQVVBsRZAVJmhW9qAQVW1oWyZZpvmTtsu704X+Gaevu3jl355yZ484PLnMv9555/vPMc888Z85zBkpKSkpKSkpKSkpKSkpKJhcVDzbmAUuBc4BjPdgbiyFgB/AG8H6OOlLTDfQBI0BUsNdGYHYWB+kqAi8BXgK6zOd+YAuKgL8d2azFTGAhcJH5/IP5PJCTnjE5C/gTnenvgKvw01Wk5QrgINL38kR3ZntgS4BpNfa3BjgJ2AQsA36vT5pTbgBeRN1LD/CzL8P9pOtj9gDH+xJVBxX0142A6yeyo6mWvz8A7Evxu3uA3fZyvBGf5C6gNWctQdIG/IUcuTBnLUGyGjmvH5ji0/B9wMfArCrfVdBV7XWgwacoCyrAvSS56WrfAjYbw5dW+a4FOAwMAjN8ikrJNHSC/3vBexddievCNo3pBuYz9lDoDBR9W+sV5JAeNKycDnQC56J0pgX4EVgE7MxNXaCcDHyDIvFzPHQ9c1HeNFbHeyE6kyExD91oiIBrXRv71BhaUuW7ViNkGOhwLSRjXkPHtc62oW0i/SzK4D+r8t1h4CmgCdhvKyRntgPXASfkLSRUHkMR+KptQ69JZEGpAFea9x+5NvYEGuPOdW3II3ej6PsD3TN0ygaUxV/g2pAHGoBVJKOSlT6MtgFzfBhyzIkko6r4tRNYnKeokJiCAmE5sBb4FTlxCLjcpeHz0WC8yaWRHOhAY+K4L3Q2e/gFnjL2HJgO/IKOb1XaRrZjvwFgL/A0CvejiUHUxy8CjgGeyVdOmCxFEfhb2gZlIj2aZrNNPXddOnA0V5vt5lxVBEovupMUoWyjxIIVwCHkvPU5awmKduB5Ro9I9gO3pd1BUWfPfDGEZhnfAb5Hcz7dwDUordmUn7QwaQAeR5F4BE1RlNTBBuTEN/MWEioXIwcOM341mvW88OlomFOLXVhk8wVkBkkR1WnA11ntOG15W19WBnOih+RYMikFjknrwBF05kLlDnQcA3iurq0A2wg7IZ2Dqmoj4OE8BNxkjA9SvYqrqDQCN5JUrv5EiiIpF+HZiP7qPcCjaNbLlnWo+McXU1Fdd7v5vBvd2v/Ko4ZR3I7O4gHqK/OIk1nfryF0IzVenlETVx1kG1qH0QncDzxo2f4W1Iceor4ItiVCUfchBSpLeYDkStZi2fZskqjozFhXMMwkWdBiO2ndhC5CEVr1NGlZi5ywA/tKsC9N27uyFhUSs0mKF1dYtl1v2j2XtajQeAE5Yit2F607TbttLkSFxJkkBTyXWbTrJUktjrZKCGveRs54z6JNF8mVeL4LUSER31+LgAUW7faZNstciMoCX/PCG4FPzHubxPhbsz01WznZ4XNi/SGzXQ6ckrLNLrM9Lns52eDTgX0oohpIH4XxcvzUY1Pf+HTgCPCIeX9zSttx2hM5UZQBvmtjtpttM+lywngcvMeNnIlT9OKieOFL4Z6sEVNkBzaiJ4CAKmMLSZEduAD91eOVlIWkyA6Mbz5soewDrWklceAreQopGueRDOnGqwyLl18dZBLfka5GGgfOIpmXXeNJVzDUcmAzGjdH6HFMzhf/hcZ4DuxAD7OIq6J6/UqrD9t5iixZjIZ37WgSfSVy4hHgVuCD/KQVl39HYLXXXgp8768aviNwmP8/vGwETcK/BTyJVk4Gwz9hFHGhVRYDXQAAAABJRU5ErkJggg=="></u></a> <!-- добавим ссылку на удаление товара -->
-             <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:16px; height: 16px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAACF0lEQVRoge3azYtPURzH8deMmiExCkNKk43EYOOhrPAHSBJrD1vZ2MiOpVjZkSzYKAspOxtJlPJQHqYsxrOIjAhjzFicc/tN052H352He5rOu073nO+5v3s+n3PvPbfO90cmLVpKYh1Yi/kzrGWi/MQz9I12wjJcQT+GEi/9uIzOQnxxR1bgLrpiuw9fJj5JM8pi4amBXmzDh6LzhuC0F9uVP3Kp0IIdeCVovl50rIqBf9hUi7RqbMZgLF2wVzDyvEZRVXkhaN/TigUx+K4+PZV5G48drbXKmEKykdTIRlIjG0mNbCQ1spHUyEZSIxtJjWwkNbKR1MhGUiMbSY1ZZWQg1tvrFFKRQvNAq8ZuXTfa6tFTiXasj/XXReCzsId6uiZRzdKCM4LmT2gr0geHcT7Wbwlb9R9LLvAG98YYYKeQv5hOlmN3HAsO4eLwE04I78tYmaJBbBhlgH3j/HaqywCOF4OPTOh042AUu2hE32ph534/rpYYuY8t6MGPUcxOBd/wWLgLT6tc4KYwE0dK+nbFvveYV1HgpGjmO9IfjyOzvQtxNtZP4ddkRU03j4RZPzAsNgfXYvx2bCdNJ/4IgtfF2FwhnT0kLN8r65HWHOcEwQ9ieyseapjYWJOupjimseRdEvLxRfsJ1tQnbeJcUL6Gf8dJNa1QVejREP8bd3AUS+oUVcZ4/3BYKnwIv+Il/k67osws4T/K2a74+5QyMQAAAABJRU5ErkJggg=="></u></a>
+             <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:16px; height: 16px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAACF0lEQVRoge3azYtPURzH8deMmiExCkNKk43EYOOhrPAHSBJrD1vZ2MiOpVjZkSzYKAspOxtJlPJQHqYsxrOIjAhjzFicc/tN052H352He5rOu073nO+5v3s+n3PvPbfO90cmLVpKYh1Yi/kzrGWi/MQz9I12wjJcQT+GEi/9uIzOQnxxR1bgLrpiuw9fJj5JM8pi4amBXmzDh6LzhuC0F9uVP3Kp0IIdeCVovl50rIqBf9hUi7RqbMZgLF2wVzDyvEZRVXkhaN/TigUx+K4+PZV5G48drbXKmEKykdTIRlIjG0mNbCQ1spHUyEZSIxtJjWwkNbKR1MhGUiMbSY1ZZWQg1tvrFFKRQvNAq8ZuXTfa6tFTiXasj/XXReCzsId6uiZRzdKCM4LmT2gr0geHcT7Wbwlb9R9LLvAG98YYYKeQv5hOlmN3HAsO4eLwE04I78tYmaJBbBhlgH3j/HaqywCOF4OPTOh042AUu2hE32ph534/rpYYuY8t6MGPUcxOBd/wWLgLT6tc4KYwE0dK+nbFvveYV1HgpGjmO9IfjyOzvQtxNtZP4ddkRU03j4RZPzAsNgfXYvx2bCdNJ/4IgtfF2FwhnT0kLN8r65HWHOcEwQ9ieyseapjYWJOupjimseRdEvLxRfsJ1tQnbeJcUL6Gf8dJNa1QVejREP8bd3AUS+oUVcZ4/3BYKnwIv+Il/k67osws4T/K2a74+5QyMQAAAABJRU5ErkJggg=="></u>Save</a>
              <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAADd0lEQVRoge3ZW4hVVRwG8N/MqBV008boQhezh4ygqYx6sIuU0I2osAjyYajoRiC92Et0o6CUwNcg9K2HSgq7GUUXoywqQiWlSApLost0cSoyc04Pa2/W9jgz7evZBOeDzZxz9l7f//vW5b/+aw999NFHH3308f/DmTi4bRFVcSs62IpT6iIdrIuoAE5O/p6Bj3BpHaRtGMliDjbg3qpEbRr5Bl9gCI9hLQ4qS9amkR9wLl5Mvo/ifZxYhqztqbUb1+Lx5PvZ+ADnt6aoAB4RstbHXb/fiD+Se3/h5h7rKoypjMAIvk7ud/AkZvZOWjFMZwTm4m3RzDs4ujfSDsQMYfe+RZj/z+BdYRP8xfRGCNnrKdHMDmHf6QmGcQfWYzwjYqrrpRycd2Nv8vy4kBgmxUAF4SkuwD24yoHz+Vtsw1f4Tki5+/A7XsNYDv7FwogOC4YexkPJ51pwOl63fy9/LyzQpeqd1/OwORPneRxWlfQIrMbfGeINuFLYpZvCoXguE3Mr5pclOw3bM2Sf4OLqGnNjQKjL9iXxx7CkKMn14iLeLWxYbVUG1yQaOkIyOCtvw9sxkTTcjgVNqCuAbiMjeRotE4fyFTUssgoYwP1ip47JeZ65TMzjb+KQhgTmQenFfjx+TBp9mBC1hdLpdwhvJY1+VvKMgFlCr52DC4VpsDS5hnNyLBY7dAIPKrCR3yW6vy7H80NCbXUn1mAjdoprq/ESZTLMFnvg6f94bhQvy1dbdV+NF41PJI3/NPmUuggvYM8k4vZiC9ZhJW7DFVgkjNi8DP9URo7BexnON3BUURNzhIKug0e77l0uLPqs8AlsElLiJfIlhOnOIwuFlxIp/2rhSFAY94mjMTf57QShh7MGvsQKnFQixlRGbkripkfd0RLcCAt2l3jEhKvxq2hgM25QrTjsNjKEVZkYu3BeBX5LMmQjeEDcQX/DciWHuQtZI0fi1UzcTTiuaoC1Cdk24YVZSv6pGt/RikZ24vNMnEov6FIMCqe39HCUkq9Xf1mSGslmuuV1kS/sIu8I+8OsugJkkDXyk5DtasMK+5v4THNV7jIN/FshxbOiiT2af/WyQDOjbYdoZFUTAXqBmfhH3IiObVdOeZwqjsaalrWUxqBQyKVY15aQqhgUynHCiGxsUUslzBCqzQkhHY63K6c65uPwtkX0gX8B+YEw2YLBBkIAAAAASUVORK5CYII="></u></a>
          </div>
 
       <div class="mmfield"> 
-   {% for file in ad_files %} 
-      {% if file.filetype == 'video' %}
+      {% for file in ad_files %}
+      {% if file.filetype == 'video' %}   
       <div class="videofield">
          <video max-width="70px" max-height="70px" controls="controls" poster="video/duel.jpg">
             <source src="/{{ file.filefield }}" type='video/ogg; codecs="theora, vorbis"'>
@@ -281,5 +329,52 @@
 <!-- </details> -->
 </div>
 </div>
+<!-- <div class="main" id="main">      
+   <div class="slider" id="dispalyed_pict">
+     <img src="1.png" alt="IMAGE!" id="pict">
+   </div>
+     <button class="sliderButton" id="prev">Prev</button>
+     <button class="sliderButton" id="next">Next</button>
+ </div> -->
+<script>
+   const next = document.getElementById('prev');
+   const prev = document.getElementById('next');
+   var all_list = document.getElementsByClassName('bigimage');
+   let num = 0;
+   let visible = Array.from(all_list)[num]
+   visible.style.display = 'block';
+   // let hidden = Array.from(all_list)[num + 1];
+   // alert(visible)
+   // alert(all_list.length)
+   // visible.style.display = 'block';
+   // hidden.style.display = 'none';
+
+    function nextp(){
+      let hidden = Array.from(all_list)[num];
+      console.log(hidden);
+      hidden.style.display = 'none';
+         if (num === (all_list.length-1)){
+            num = 0;
+         }else{ num += 1}
+      const visible = Array.from(all_list)[num];
+      console.log(visible);
+      visible.style.display = 'block';
+      
+    }
+    function prevp(){
+      const hidden = Array.from(all_list)[num];
+      console.log(hidden);
+      hidden.style.display = 'none';
+        if (num === 0){
+            num = (all_list.length-1);
+        }else{num -= 1}
+      const visible = Array.from(all_list)[num];
+      console.log(num );
+      visible.style.display = 'block';
+         
+    }
+    next.addEventListener('click', nextp);
+    prev.addEventListener('click', prevp);
+</script>
 {% endblock content %}
 
