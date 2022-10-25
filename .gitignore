@@ -1,2 +1,4 @@
 bulletinboard/ignore.py
 ignore.py
+static/files
+bulletinboard/static/files

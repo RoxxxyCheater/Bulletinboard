@@ -116,7 +116,6 @@ class AdAdd(LoginRequiredMixin,CreateView):
         return context
     
     def post(self, request, *args, **kwargs):
-        post_save_request = super().post(request, *args, **kwargs)
         if request.method == 'POST':
             post = Ad.objects.create(
                 author=request.user, 
@@ -132,9 +131,9 @@ class AdAdd(LoginRequiredMixin,CreateView):
                 files_upload = FeedFile.objects.create(file = post, filefield = file, filetype = re.split('/',str(file.content_type))[0])
                 files_upload.save()
             print('!!Files:', files)
+        #post_save_request = super().post(request, *args, **kwargs)
         post.save()
-           
-        return post_save_request
+        return redirect('/')
 
 
 

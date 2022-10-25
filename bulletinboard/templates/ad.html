@@ -9,25 +9,7 @@
 
 {% block content %}
 <style>
-   body {
-      background: #dae0e6;
-   }
 
-   .row{
-      border: 1px solid transparent;
-      /* border-radius: 8px; */
-      /* border-image: linear-gradient(transparent 0%, #08cfee 100%);
-      border-image-slice: 1; */
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.5); /* Параметры тени */
-      padding: 10px;
-      background: none;
-   }
-   .row{
-      border: 1px solid transparent;
-      border-image: linear-gradient(transparent 0%, #08cfee 100%);
-      border-image-slice: 1;
-      overflow: hidden;
-   }
    .postframe{
       min-height: 90px;
       max-width: 620px;
@@ -77,33 +59,41 @@
   .sliderButton {
       display: flex;
       height: 100%;
+      width: 52px;
       justify-content: center;
       color: #ff3f3f;
       align-items: center;
       position: absolute;
       top: 50%;
-      opacity: 50%;
+      opacity: 1%;
       transform: translate(-50%, -50%);
       -ms-transform: translate(-50%, -50%);
-      background-color: #555;
       font-size: 16px;
       border: none;
       cursor: pointer;
    }
    #next{
-      right: -6.5%;
+      left: 96%;
       color: #cccccc;
+      background: linear-gradient(to right, transparent 0%, #555 100%);
+      border-image-slice: 1;
    }
    #prev{
-      left: 0%;
+      left: 4%;
       color: #cccccc;
+      background: linear-gradient(to left, transparent 0%, #555 100%);
+      border-image-slice: 1;
+   }
+   .sliderButton:hover {
+      opacity: 30%;
+      color: black;
    }
    .sliderButton:active{
       opacity: 60%;
       color: black;
    }
    .sliderButton .sidebutton{
-      width: 20px;
+      width: 25px;
       height: 45px;
    }
    .mmfield {
@@ -235,8 +225,7 @@
          <div class="ad_titles" style="font-size: 20px; text-align:left; font-weight:bolder;font-style:italic;">
              <p >{{ Ad.title | title }}</p> 
          <hr>
-         </div> 
-         <div class="content" style="padding: 0.5rem 1rem; text-align:left; font-size: small;">
+         </div>             
             <div class="slider" id="dispalyed_pict">             
                {% for file in ad_files %}
                   {% if file.filetype == 'image' %}
@@ -246,6 +235,8 @@
                <button class="sliderButton" id="prev"><img class="sidebutton" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABkUlEQVRoge3aT0rDQBTH8e+THsGF9xhyEKHFjaDL6nUEvUBVKiJ4jiZ3ELxG5blR6KKT5s+bzBvIW4b+yPskzWSGCcw1V5KSqU7UNM2lqj4CC1W9q6rq3TJzZtlsS0NXqvoGXADnIvJknUkO+WtoAywODv9YZ5JCIg3tReTeMgMJIXVdr45dVRG5DSF8WGX+K8nDXtf1Cng50tBNCOHZKnNY5pAcCDCG5EKAISQnAowguRFgAPGAgJEQLwgYAfGEgIEQbwgYAPGIgJ4QrwjoAfGMgI4Q7wjoACkBAScgpSCgBVISAiKQ0hAQWSGqqkZ+H72DQzKWFT3Jbrdbisgrx5edG6uMVbVerZIwJ297KZhO/98SMJ0fRO+YXiOKZ0zvodErZtAY7xEz+GXlDTPqresJM3r64AVjMg/ygDGb0OXGmM5Mc2LMp9i5MEnWCjkwyRY9U2OSrt5iG5uquqyq6tMqA4l3dUMIWxG5BvYHhxci8mCZgQn22WONWWcm+fIhhLBV1SXwBXyr6jpFZq65EtQv2iIsK/ObMl0AAAAASUVORK5CYII="></button>
                <button class="sliderButton" id="next"><img class="sidebutton" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABsElEQVRoge3ZTUoDQRDF8X9pbuDOa3Tu4SYigqDb4HVEL5Aoooj3mMwZXHgKIVpuFII6H11dPdPCvGUPb3i/CVlMAlOmZIm0XdxsNsfADfAGXM7n8+euG1o6HtlruqCqAlwDB8Ah8FDX9UnbzSwdrzRCRESBj52jmaqu2oZZOl5phACIyBLY7hz1wUR3PNIKCSE8qerpH8PWdV2feXU80vpl/05VVQsRuQNmO8fvInIRQlh5dVLSC2IdNiSmN8Q6bChMFMQ6bAhMNMQ6LDfGBLEOy4kxQ6zDcmGSINZhOTDJEOswb4wLxDrME+MGsQ7zwrhCrMM8MO4Q67BUTBaIdVgKJhvEOsyKyQqxDrN0skOsw2I7rW+IXhGRpgemXp3sn8jXz0O3/H6y5yGEtVcnK2QoBGSEDImATJChEZABMgYCnCFjIcARMiYCnCBjI8ABUgICEiGlICABUhICjJDSEGCAlIiASEipCIiAlIyAnpDSEdAD8h8Q0AGpqupIRB5/DNqKyFkI4d6r45Guf3WvYgdZOh7pemffNwyydJLTClHVJfAKvKjqos8gS2fKlILzCUXvGDP9QrX0AAAAAElFTkSuQmCC"></button>
             </div>
+         <div class="content" style="padding: 1rem 1rem; text-align:left; font-size: small;">
+
             {{ Ad.content }}
          </div>
          <div class="ads_bottom">
@@ -254,10 +245,9 @@
              <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:16px; height: 16px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAACF0lEQVRoge3azYtPURzH8deMmiExCkNKk43EYOOhrPAHSBJrD1vZ2MiOpVjZkSzYKAspOxtJlPJQHqYsxrOIjAhjzFicc/tN052H352He5rOu073nO+5v3s+n3PvPbfO90cmLVpKYh1Yi/kzrGWi/MQz9I12wjJcQT+GEi/9uIzOQnxxR1bgLrpiuw9fJj5JM8pi4amBXmzDh6LzhuC0F9uVP3Kp0IIdeCVovl50rIqBf9hUi7RqbMZgLF2wVzDyvEZRVXkhaN/TigUx+K4+PZV5G48drbXKmEKykdTIRlIjG0mNbCQ1spHUyEZSIxtJjWwkNbKR1MhGUiMbSY1ZZWQg1tvrFFKRQvNAq8ZuXTfa6tFTiXasj/XXReCzsId6uiZRzdKCM4LmT2gr0geHcT7Wbwlb9R9LLvAG98YYYKeQv5hOlmN3HAsO4eLwE04I78tYmaJBbBhlgH3j/HaqywCOF4OPTOh042AUu2hE32ph534/rpYYuY8t6MGPUcxOBd/wWLgLT6tc4KYwE0dK+nbFvveYV1HgpGjmO9IfjyOzvQtxNtZP4ddkRU03j4RZPzAsNgfXYvx2bCdNJ/4IgtfF2FwhnT0kLN8r65HWHOcEwQ9ieyseapjYWJOupjimseRdEvLxRfsJ1tQnbeJcUL6Gf8dJNa1QVejREP8bd3AUS+oUVcZ4/3BYKnwIv+Il/k67osws4T/K2a74+5QyMQAAAABJRU5ErkJggg=="></u>Save</a>
              <a href="#" style="flex-basis: auto; flex-grow: 1;"><u><img style="width:18px; height: 18px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAADd0lEQVRoge3ZW4hVVRwG8N/MqBV008boQhezh4ygqYx6sIuU0I2osAjyYajoRiC92Et0o6CUwNcg9K2HSgq7GUUXoywqQiWlSApLost0cSoyc04Pa2/W9jgz7evZBOeDzZxz9l7f//vW5b/+aw999NFHH3308f/DmTi4bRFVcSs62IpT6iIdrIuoAE5O/p6Bj3BpHaRtGMliDjbg3qpEbRr5Bl9gCI9hLQ4qS9amkR9wLl5Mvo/ifZxYhqztqbUb1+Lx5PvZ+ADnt6aoAB4RstbHXb/fiD+Se3/h5h7rKoypjMAIvk7ud/AkZvZOWjFMZwTm4m3RzDs4ujfSDsQMYfe+RZj/z+BdYRP8xfRGCNnrKdHMDmHf6QmGcQfWYzwjYqrrpRycd2Nv8vy4kBgmxUAF4SkuwD24yoHz+Vtsw1f4Tki5+/A7XsNYDv7FwogOC4YexkPJ51pwOl63fy9/LyzQpeqd1/OwORPneRxWlfQIrMbfGeINuFLYpZvCoXguE3Mr5pclOw3bM2Sf4OLqGnNjQKjL9iXxx7CkKMn14iLeLWxYbVUG1yQaOkIyOCtvw9sxkTTcjgVNqCuAbiMjeRotE4fyFTUssgoYwP1ip47JeZ65TMzjb+KQhgTmQenFfjx+TBp9mBC1hdLpdwhvJY1+VvKMgFlCr52DC4VpsDS5hnNyLBY7dAIPKrCR3yW6vy7H80NCbXUn1mAjdoprq/ESZTLMFnvg6f94bhQvy1dbdV+NF41PJI3/NPmUuggvYM8k4vZiC9ZhJW7DFVgkjNi8DP9URo7BexnON3BUURNzhIKug0e77l0uLPqs8AlsElLiJfIlhOnOIwuFlxIp/2rhSFAY94mjMTf57QShh7MGvsQKnFQixlRGbkripkfd0RLcCAt2l3jEhKvxq2hgM25QrTjsNjKEVZkYu3BeBX5LMmQjeEDcQX/DciWHuQtZI0fi1UzcTTiuaoC1Cdk24YVZSv6pGt/RikZ24vNMnEov6FIMCqe39HCUkq9Xf1mSGslmuuV1kS/sIu8I+8OsugJkkDXyk5DtasMK+5v4THNV7jIN/FshxbOiiT2af/WyQDOjbYdoZFUTAXqBmfhH3IiObVdOeZwqjsaalrWUxqBQyKVY15aQqhgUynHCiGxsUUslzBCqzQkhHY63K6c65uPwtkX0gX8B+YEw2YLBBkIAAAAASUVORK5CYII="></u></a>
          </div>
-
       <div class="mmfield"> 
       {% for file in ad_files %}
-      {% if file.filetype == 'video' %}   
+      {% if file.filetype == 'video' %}
       <div class="videofield">
          <video max-width="70px" max-height="70px" controls="controls" poster="video/duel.jpg">
             <source src="/{{ file.filefield }}" type='video/ogg; codecs="theora, vorbis"'>
