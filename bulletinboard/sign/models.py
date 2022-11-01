@@ -1,9 +1,11 @@
+from asyncio.windows_events import NULL
+from xml.parsers.expat import model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 #from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
-
+from django.db import models
 
 class BaseRegisterForm(UserCreationForm):
     email = forms.EmailField(label = "Email")
@@ -19,7 +21,7 @@ class BaseRegisterForm(UserCreationForm):
                   "password1", 
                   "password2", )
 
-    
+   
 
 class BasicSignupForm(BaseRegisterForm):
     
@@ -28,3 +30,11 @@ class BasicSignupForm(BaseRegisterForm):
             basic_group = Group.objects.get(name='ordinary')
             basic_group.user_set.add(user)
             return user
+
+class Confirmkey(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    verif_code = models.CharField(default=NULL, unique=True, max_length=6)
+    
+
+    def __str__(self):
+        return f'{self.user.username}, {self.user.id}, {self.verif_code}' 
