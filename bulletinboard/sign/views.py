@@ -20,11 +20,32 @@ class BaseRegisterView(CreateView):
 #     def usual_login_view(request):
 class CodeConfirmEmailView(ConfirmEmailView):
     template_name = "account/email_confirm." + app_settings.TEMPLATE_EXTENSION
+    
+    def get(self, *args, **kwargs):
+        if self.request.method == 'GET': 
+            print('GET_SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
+        if self.request.method == 'POST': 
+            print('POST_SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
+        try:
+            self.object = self.get_object()
+            if app_settings.CONFIRM_EMAIL_ON_GET:
+                return self.post(*args, **kwargs)
+        except Http404:
+            self.object = None
+        ctx = self.get_context_data()
+        return self.render_to_response(ctx)
 
     def post(self, request, *args, **kwargs):
+        if self.request.method == 'GET': 
+            print('GET_SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
+        if self.request.method == 'POST': 
+            print('POST_SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
         self.object = confirmation = self.get_object()
         confirmation.confirm(self.request)
-
+        if self.request.method == 'GET': 
+            print('GET_SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
+        if self.request.method == 'POST': 
+            print('POST_SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS')
         # In the event someone clicks on an email confirmation link
         # for one account while logged into another account,
         # logout of the currently logged in account.
@@ -55,3 +76,5 @@ class CodeConfirmEmailView(ConfirmEmailView):
             ctx = self.get_context_data()
             return self.render_to_response(ctx)
         return redirect(redirect_url)
+
+confirm_email = CodeConfirmEmailView.as_view()

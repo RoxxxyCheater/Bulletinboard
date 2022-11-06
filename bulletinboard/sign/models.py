@@ -37,4 +37,4 @@ class Confirmkey(models.Model):
     
 
     def __str__(self):
-        return f'{self.user.username}, {self.user.id}, {self.verif_code}' 
+        return f'{self.verif_code}, {self.user.username}, {self.user.id}' 
