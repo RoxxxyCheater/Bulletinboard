@@ -39,20 +39,20 @@ class AdDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        print(self.object.id)
-        print('////!!!!', Comments.objects.all().values())
+        # print(self.object.id)
+        # print('////!!!!', Comments.objects.all().values())
         ad_filess = FeedFile.objects.filter(file_id = self.object.id).values()
         context['ad_files'] = FeedFile.objects.filter(file_id = self.object.id).values()
         context['file_list'] = FeedFile.objects.filter()
         filename, file_extension = os.path.splitext(str(ad_filess))
         context['file_extension'] = file_extension[0:-4]
         context['comments'] = Comments.objects.filter(Ad = self.object)
-        print(self.request.GET.get('pk'))
+        # print(self.request.GET.get('pk'))
         return context
 
 
     def post(self, request, *args, **kwargs):
-        if request.method == 'POST':
+        if request.method == 'POST' and request.POST.get('subject') != None:
             ad_id = self.kwargs.get('pk')
             new_comment = Comments.objects.create(
                 Ad = Ad.objects.get(id = ad_id),
@@ -60,8 +60,10 @@ class AdDetail(DetailView):
                 content =  request.POST.get('subject'),
                 accepted = False,
             )
-            #print('@@@@',newMailSub, '@@@@', newMailSub.client_title, '@@@@', newMailSub.message, '@@@@', newMailSub.category, '@@@@', newMailSub.subscriber, '@@@@', newMailSub.subscriber_email)
+            #Have to correct enter point: request.method == 'POST' && request.method == '
+            #print('@@@@',comment, '@@@@', comment.client_title, '@@@@', comment.message, '@@@@', comment.category, '@@@@', comment.subscriber, '@@@@', comment.subscriber_email)
             new_comment.save()
+            #post_save.connect(comment_email_sender, dispatch_uid="new_comment")
         return redirect('/callboard/'+ str(ad_id))
         
 
@@ -98,8 +100,9 @@ class Comment(LoginRequiredMixin, ListView):
             elif accept:
                 comment = Comments.objects.get(id = accept)
                 comment.accepted = True
-            comment.save()
-        return redirect('/callboard/comments/')
+                comment.save()
+
+        return HttpResponse(comment)
         
 class AdAdd(LoginRequiredMixin,CreateView):
     template_name = 'add_ad.html'  # Replace with your template.

@@ -33,7 +33,6 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
-    'bulletinboardapp.apps.BulletinboardappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
+    'bulletinboardapp.apps.BulletinboardappConfig',
 ]
 LOGIN_URL = '/accounts/login/'
 SITE_ID = 1
@@ -175,4 +175,5 @@ EMAIL_HOST_USER = EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = EMAIL_HOST_PASSWORD
 EMAIL_USE_SSL = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL

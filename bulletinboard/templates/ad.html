@@ -288,7 +288,7 @@
 {% if request.user.is_authenticated %}   
 <form class="new-comment" method="post">
    {% csrf_token %}
-   <textarea rows="4" cols="50" name="subject" placeholder="Введите ваше сообщение:" class="message" required></textarea>
+   <textarea rows="4" cols="50" name="subject" placeholder="Введите ваше сообщение:" class="message" ></textarea>
    <input name="submit" class="btn" type="submit" value="Отправить" />
 </form>
 {% else %}

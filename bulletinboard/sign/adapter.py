@@ -34,3 +34,4 @@ class CustomAllauthAdapter(DefaultAccountAdapter):
             email_address.verified = True
             email_address.set_as_primary(conditional=True)
             email_address.save()
+            verification_code.delete()
