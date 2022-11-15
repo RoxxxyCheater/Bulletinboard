@@ -88,6 +88,7 @@ class Comment(LoginRequiredMixin, ListView):
             context['posts_all'].append(post)
             com = Comments.objects.filter(Ad = post).values().first()
             context['comments_all'].append(com)
+            
         return context
 
     def post(self, request, *args, **kwargs):
@@ -102,7 +103,7 @@ class Comment(LoginRequiredMixin, ListView):
                 comment.accepted = True
                 comment.save()
 
-        return HttpResponse(comment)
+        return redirect('/callboard/comments/')
         
 class AdAdd(LoginRequiredMixin,CreateView):
     template_name = 'add_ad.html'  # Replace with your template.

@@ -9,14 +9,16 @@ from ignore import DEFAULT_FROM_EMAIL
 
 @receiver(post_save, sender=Comment)
 def comment_email_sender(sender, instance, created, **kwargs):
+    comment_obj_subject = None
     print(sender, instance, created)
-    if instance.Ad.author.email != instance.commAuthor.email:
-        if created:
-            comment_obj_subject = f'A new comment {instance.content} has been published by {instance.commAuthor.username } on your Ad {instance.Ad} dated {instance.created_at}'
-            Recipient = instance.Ad.author.email
-        else:
-            comment_obj_subject = f'Your comment {instance.content} to the Ad {instance.Ad} was accepted by the Ad author {instance.Ad.author.username}'
-            Recipient = instance.commAuthor.email
+    #if instance.Ad.author.email != instance.commAuthor.email:
+    if created:
+        comment_obj_subject = f'A new comment {instance.content} has been published by {instance.commAuthor.username } on your Ad {instance.Ad} dated {instance.created_at}'
+        Recipient = instance.Ad.author.email
+    elif instance.accepted:
+        comment_obj_subject = f'Your comment {instance.content} to the Ad {instance.Ad} was accepted by the Ad author {instance.Ad.author.username}'
+        Recipient = instance.commAuthor.email
+    if comment_obj_subject: 
         html_content = render_to_string(
             'comment_update.html',
             {
@@ -32,6 +34,6 @@ def comment_email_sender(sender, instance, created, **kwargs):
         )
         
         msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        #msg.send()
         print(msg)
         print("!!!!!!!!!!!email_sent!!!!!!!!!!")
