@@ -71,8 +71,8 @@
             <a class="nav-link" href="/callboard/authors/">Authors</a>
           </li>
           <li class="nav-item"><a class="nav-link" href="/accounts/logout/">{{ request.user }} - Выйти</a> </li>
-          {% if is_not_authors %}
-          <button> <a href="sign/upgrade/"> Хочу стать автором!</a> </button>
+          {% if user.is_staff or user.is_superuser%}
+            <button> <a href="sign/upgrade/"> Хочу стать автором!</a> </button>
           {% endif %} 
         </ul>
       </div>
