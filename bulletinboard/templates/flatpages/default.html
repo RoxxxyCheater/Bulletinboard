@@ -74,9 +74,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100px;
-  width: 60%;
-  height: 36px;
+  width: 22px;
+  height: 22px;
   padding: 15px 16px;
   background: #FFFFFF;
   border: 2px solid rgba(125, 138, 253, 0.3);
@@ -102,6 +101,7 @@
   border-radius: 4px;
   overflow-y: scroll;
   z-index: 1;
+  text-align: center;
 }
     .select-body__height {
   height: 443px;
@@ -109,8 +109,8 @@
     .newsletters_form {
   list-style: none;
 }
-   .newsletters_form:nth-child(n) {
-  margin-bottom: 16px;
+   .newsletters_form input {
+  margin-bottom: 46px;
 }  
 /*
     .select-body__item:last-child {
@@ -141,6 +141,7 @@
 
     .show {
   display: block;
+  margin: 0 auto;
 }
 
  </style>
@@ -170,14 +171,14 @@
           </li>
           <li class="nav-item"><a class="nav-link" href="/accounts/logout/">{{ request.user }} - Выйти</a> </li>
           {% if user.is_staff or user.is_superuser%}
-            <button class="news_toggler"> <a > Хочу стать автором!</a> </button> <!-- href="upgrade/" -->
+            <button class="news_toggler"> <a> <img style="width: 22px; height: 22px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAABmJLR0QA/wD/AP+gvaeTAAAEQElEQVRogd3aT2icRRgG8N+mSapJ1dSoSdWKhUI9iG1UJAhaQ/BSDyKoeBAURKEXBU/iRQqKWBA8CEqtVg/+g4ooRa1iEQ8KSqoVqdRakWqtaf1b06QmjfEwG3Z3dr7Nt8luuvWBIczM+833PN+8874zs+E0RyHRtgTXYT3WYAXOL5aOMrsuLG0Qj38wXlafwtFiOYzd2IUv8W+tgYbxLWZatOzDUC3yUy1Acq4ylRKxpMW/fFy+QRulNbAeHyVm5bjgd+P4s1ifTNg1Ep3oRo+wzgaKf2MMFLmBR1Sr3IYzm0w2D7rwkmp+D5YbvRp1jmkN8rPoErygnOPLFP0IfdEDezCxWOxyYFzgVI4+sgUcazajeSDmdAElAcujzuNNp1M//o7qvdBerHREnVkCbhbyxTEcwXf4QsiWzUbMqYOSgPaoM5Wu78HWjMF/xHvYgXeFZNNoxJzaKblQLCCF22r0rcS9eEsQ8zj66yRYL+oWsD/nwH14CAfwpJCQmoEKzhOqk1iMc/EmTqgv7R/G7Q0gvC0ad4LSDOTB77hFSHD9uEpYF88JbpOFfryOFzQxOeaZgbkwiOcTY5WXEdU5Jy+SMzCLRgiYxUV4BielRezHpfMYd8EulBeHsBHXYm+ifzU+MP+ZqEC9AlbhDlwvLOpa+AzXKG66IqzGOxq4JvK40LBwdi23OyiEynU1xi4IeSHlTlmJMYUFr4G3M0jMlo+FyJSFLBG3LpaA+MyQKtN4Fmckni/glcQzP+OcxRBwmeAyeZLXJ9KLdJmwsGP7zYshgJC+B4V9zxb8VkPEgQwRg8JMxSfAuaJSU/JAJ+4SQmfWTKTcaUvC9tFTIWAWy6T9e0ZYEzEuUb2nOqT2prLpmbiAJxICpqWj04sJ2w31CmhkJp4RttGvRe1teCphn8oBN8335fXOwNnSF8MEd0qtiYHIriCE0HKb72u8syEzsEG4gvwLf2CTar8dw8OJZ++M6jPC8bMcq4Rb8LqRZwaulr783ZSw7VQdYg8m7O5LjHdjBscFz8BG6Shxv2p3msQbUdtKnBe1xZdVhI1eHsxQEnAyxwMXZ7T34KxE++eJtsujeuoktyIHF4qc6xEwktG+T/omL/V1L4zqo6pvu1MfI4WaAlKutRk/RG1TeCDjBbtV+v0kPo1sprEzatuVMV7MqYJzHM62ZwzSg8eKL92qOjTGWCNk6B24IcOmF0/jfdxdY6ztEcefyju/jjrj8NYK2KmS4x5K03IkMs6zP19sxJyOUhIwGnWulf5Z51ShG1dEbaOUBMQRpku4GmkFEd3Cjja+ABihlICulA6TE4KvjQlbh3HhYN9MLBU+3HJhX7VW+vZinbJQ3SbE8zzHxVYoeyU2k0NOjx+6J2WHZEPCj8inmmStL19BPrWnLwgrflhYG/3CgbtX5fm2mf/scQK/CuH9FyGrf4ivBCH/H/wHt/m4vNBcQVIAAAAASUVORK5CYII="></a> </button> <!-- href="upgrade/" -->
               <div class="newsletters hide">
-                <form method="post" required class="newsletters_form"> 
+                <form method="post" required class="newsletters_form" action="{% url 'upgrade' %}" name="newsletters_form_request"> 
                   {% csrf_token %}  
                   <input placeholder="Title of newsletter" type="text" required>
                   <input placeholder="user_email" type="email" required>
                   <input placeholder="content newsletter" type="text" required>
-                  <button type="submit" class="submit_button">Send newsletter</button>
+                  <button type="submit" class="submit_button" href="/protect/upgrade/">Send newsletter</button>
                 </form>
 
               </div> 

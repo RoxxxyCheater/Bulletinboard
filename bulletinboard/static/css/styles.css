@@ -11288,7 +11288,7 @@ textarea.form-control-lg {
 }
 
 
-
+/* 
 .select {
   width: 60%;
 }
@@ -11354,10 +11354,10 @@ textarea.form-control-lg {
    .newsletters_form:nth-child(n) {
   margin-bottom: 16px;
 }  
-/*
+
     .select-body__item:last-child {
   margin-bottom: 20px;
-} */
+} 
 
     .submit_button {
   display: flex;
@@ -11383,4 +11383,4 @@ textarea.form-control-lg {
 
     .show {
   display: block;
-}
+} */
