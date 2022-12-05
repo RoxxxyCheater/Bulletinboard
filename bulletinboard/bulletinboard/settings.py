@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # ... include the providers you want to enable:
     'allauth.socialaccount.providers.google',
     'bulletinboardapp.apps.BulletinboardappConfig',
+    'django_apscheduler',
 ]
 LOGIN_URL = '/accounts/login/'
 SITE_ID = 1
@@ -177,3 +178,5 @@ EMAIL_USE_SSL = True
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = DEFAULT_FROM_EMAIL
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+APSCHEDULER_RUN_NOW_TIMEOUT = 25 # 604800

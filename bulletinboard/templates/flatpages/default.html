@@ -176,7 +176,7 @@
                 <form method="post" required class="newsletters_form" action="{% url 'upgrade' %}" name="newsletters_form_request"> 
                   {% csrf_token %}  
                   <input placeholder="Title of newsletter" type="text" name="title_email" required>
-                  <input placeholder="user_email" type="email" name="personal_email" required>
+                  <input placeholder="user_email" type="email" name="personal_email">
                   <input placeholder="content newsletter" type="text" name="content_email" required>
                   <button type="submit" method="post" class="submit_button" href="/protect/upgrade/">Send newsletter</button>
                 </form>
