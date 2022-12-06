@@ -13,7 +13,7 @@ import os, re
 #from sign.views import upgrade_me
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
-
+from bulletinboardapp.management.commands.runapscheduler import my_job
 class Ads(ListView):
     model = Ad
     template_name = 'ads_all.html'
@@ -39,15 +39,12 @@ class AdDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # print(self.object.id)
-        # print('////!!!!', Comments.objects.all().values())
         ad_filess = FeedFile.objects.filter(file_id = self.object.id).values()
         context['ad_files'] = FeedFile.objects.filter(file_id = self.object.id).values()
         context['file_list'] = FeedFile.objects.filter()
         filename, file_extension = os.path.splitext(str(ad_filess))
         context['file_extension'] = file_extension[0:-4]
         context['comments'] = Comments.objects.filter(Ad = self.object)
-        # print(self.request.GET.get('pk'))
         return context
 
 
@@ -61,7 +58,6 @@ class AdDetail(DetailView):
                 accepted = False,
             )
             #Have to correct enter point: request.method == 'POST' && request.method == '
-            #print('@@@@',comment, '@@@@', comment.client_title, '@@@@', comment.message, '@@@@', comment.category, '@@@@', comment.subscriber, '@@@@', comment.subscriber_email)
             new_comment.save()
             #post_save.connect(comment_email_sender, dispatch_uid="new_comment")
         return redirect('/callboard/'+ str(ad_id))
@@ -84,6 +80,7 @@ class Comment(LoginRequiredMixin, ListView):
         context['comments_all']= []
         context['posts_all']= []
         context['user'] = self.request.user.username
+        my_job()
         for post in posts_user:
             context['posts_all'].append(post)
             com = Comments.objects.filter(Ad = post).values().first()
@@ -110,7 +107,6 @@ class AdAdd(LoginRequiredMixin,CreateView):
     success_url = '/callboard/'  # Replace with your URL or reverse().
     permission_required = 'bulletinboardapp.add_ad'
     form_class = AdForm
-    print(form_class)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -131,10 +127,8 @@ class AdAdd(LoginRequiredMixin,CreateView):
 
             for file in files:
                 filetype = re.split('/',str(file.content_type))[0]
-                print(file.content_type, filetype)
                 files_upload = FeedFile.objects.create(file = post, filefield = file, filetype = re.split('/',str(file.content_type))[0])
                 files_upload.save()
-            print('!!Files:', files)
         #post_save_request = super().post(request, *args, **kwargs)
         post.save()
         return redirect('/')

@@ -28,7 +28,6 @@ class CustomAllauthAdapter(DefaultAccountAdapter):
     def confirm_email(self, request, email_address):
         verification_code = Confirmkey.objects.filter(user= User.objects.get(id = email_address.user.id))
         if request.POST.get('ver_code') != verification_code.first().verif_code:
-            #print(request.path)
             return HttpResponse({"error":"This data is in database"})
         elif request.POST.get('ver_code') == verification_code.first().verif_code:
             email_address.verified = True

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <style>
+    .ad_topic{
+      background: linear-gradient(to top, transparent 0%, #00ddff1c 100%);
+      border-image-slice: 1;
+      display: flex;
+      padding: 0 auto;
+      height: 25px;
+    }
+    .ad_topic a, u , .ad_titles a{
+        text-decoration: none;
+        color: #000000;
+    }
+    .ad_topic td{
+        padding: 0 30px;
+        font-weight: bold;
+        color:rgba(0, 0, 0, 0.573);
+        font-style:italic;
+    }
+    </style>
+    <table class="ads_frame" style="text-align: center !important;">
+        <tr class="ad_topic">
+            <td>
+                Название статьи
+            </td>
+            <td>
+                Дата публикации
+            </td>
+            <td>
+                Содержимое
+            </td >
+            <td>
+                Автор
+            </td>
+            <td>
+                Категория
+            </td>
+        </tr>
+        <hr>
+        {% for ad in newMailSub %}
+            <a href="http://127.0.0.1:8000/callboard/{{ad.id}}">
+                <tr>
+                    <td>
+                        {{ad.title}}
+                    </td>
+                    <td>
+                        {{ad.created_ad}}
+                    </td>
+                    <td>
+                        {{ad.content}}
+                    </td>
+                    <td>
+                        {{ad.author.username}}
+                    </td>
+                    <td>
+                        {{ad.category.catName}}
+                    </td>
+                </tr>
+            </a>
+        {% endfor %}
+    </table>
+</body>
+</html>
