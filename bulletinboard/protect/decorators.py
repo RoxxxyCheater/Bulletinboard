@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 from .models import EmailAddress
-from .utils import send_email_confirmation
+from allauth.account.utils import send_email_confirmation
 
 
 
