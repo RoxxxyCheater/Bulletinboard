@@ -139,9 +139,9 @@
    .imgfield{
       display: flex;
       justify-content: center;
-      transition: 0.5s;
+      transition: 0.25s;
    }
-   .imgfield:hover {
+   .imgfield:hover{
     transform: scale(5.2); /* Увеличиваем масштаб */
    }
    .otherfield {
@@ -294,8 +294,8 @@
 {% else %}
   <p><a href="/accounts/login/">Authorize</a> to write a comment</p>
 {% endif %}
-<!-- <details>
-   <summary>Show comments</summary> -->
+<details>
+   <summary>Show comments</summary>
    <div class="comments">
       {% for comment in comments %}
          {% if comment.accepted %}
@@ -316,7 +316,7 @@
          {% endif %}
       {% endfor %}
    </div>
-<!-- </details> -->
+</details>
 </div>
 </div>
 <!-- <div class="main" id="main">      

@@ -80,13 +80,13 @@ class Comment(LoginRequiredMixin, ListView):
         context['comments_all']= []
         context['posts_all']= []
         context['user'] = self.request.user.username
-        my_job()
+        # my_job()
         for post in posts_user:
             context['posts_all'].append(post)
             com = Comments.objects.filter(Ad = post).values().first()
             context['comments_all'].append(com)
             
-        return context
+        return context 
 
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':
